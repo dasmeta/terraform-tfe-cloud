@@ -1,4 +1,4 @@
-output "id" {
-  description = "Returns the ID of the created workspace."
-  value       = tfe_workspace.test.id
+output "workspace" {
+  description = "The Terraform Cloud workspace attributes"
+  value       = tfe_workspace.this
 }

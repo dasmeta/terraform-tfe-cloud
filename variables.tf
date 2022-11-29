@@ -19,30 +19,3 @@ variable "component_deps_processing_enabled" {
   description = "Boolean flag to enable/disable processing stack config dependencies for the components in the provided stack"
   default     = false
 }
-
-#============Workspace==========
-variable "workspaces_config_path" {
-  description = "Path to workspace configuration yaml file"
-  type        = string
-  default = "../done/examples/complete/yamls/workspace.yaml"
-}
-
-variable "organization_name" {
-  description = "Organization name of Terraform Cloud"
-  type        = string
-  default = "dasmeta"
-}
-
-
-variable "vcs_oauth_token_id" {
-  description = ""
-  type        = string
-  default     = null
-}
-
-variable "default_management_workspace_trigger" {
-  description = "Managed workspaces should have a run triggered when the managed workspace is executed. This variable sets the name of this workspace. If you want to disable this set the value to null."
-  type        = string
-  default     = null
-}
-#===================

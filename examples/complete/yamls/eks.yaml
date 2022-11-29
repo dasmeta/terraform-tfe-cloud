@@ -1,19 +1,9 @@
-# import:
-#   - imports-level-2
-
-# vars:
-#   stage: prod
-
 terraform:
   vars: {}
-
-# helmfile:
-#   vars: {}
 
 components:
   terraform:
     eks:
-      # component: eks
       vars:
         source: "dasmeta/eks/aws"
         version: "v1.2.3"
@@ -40,9 +30,3 @@ components:
         availability_zones: data.aws_availability_zones.available.names
         private_subnets: ["172.16.1.0/24", "172.16.2.0/24", "172.16.3.0/24"]
         public_subnets: ["172.16.4.0/24", "172.16.5.0/24", "172.16.6.0/24"]
-        
-        
-  # helmfile:
-  #   nginx-ingress:
-  #     vars:
-  #       installed: true

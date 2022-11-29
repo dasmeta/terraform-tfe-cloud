@@ -14,13 +14,6 @@ terraform {
       source  = "cloudposse/utils"
       version = ">= 1.5.0"
     }
-    tfe = {
-      version = "~> 0.37.0"
-    }
+   
   }
-}
-
-provider "tfe" {
-  hostname = "app.terraform.io"
-  token = ""
 }
