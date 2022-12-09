@@ -1,4 +1,3 @@
-output "config" {
-  value       = local.config
-  description = "Stack configurations"
+output "debug" {
+  value = local.module_providers_grouped
 }

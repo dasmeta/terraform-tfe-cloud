@@ -1,0 +1,34 @@
+terraform {
+%{ if terraform_cloud.org != null ~}
+  cloud {
+    organization = "${terraform_cloud.org}"
+
+    workspaces {
+      tags = ${terraform_cloud.workspaces_tags}
+    }
+  }
+  %{ else ~}
+%{ if terraform_backend.name != null ~}
+  backend "${terraform_backend.name}" {
+%{ for key, value in terraform_backend.configs }
+    ${key} = ${value}%{ endfor ~}
+
+  }
+%{ endif ~}
+  %{ endif ~}
+
+  required_providers {
+  %{ for key, value in providers }
+    ${value.name} = {
+      source  = "${value.source}"
+      version = "${value.version}"
+%{ if value.configuration_aliases != null ~}
+      configuration_aliases = ${value.configuration_aliases}%{ endif ~}
+
+    }
+  %{ endfor ~}
+
+  }
+
+  required_version = "${terraform_version}"
+}

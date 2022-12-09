@@ -1,0 +1,8 @@
+%{ for provider_key, provider_value in providers }provider "${provider_value.name}" {
+%{ if provider_value.alias != null ~}
+  alias = "${provider_value.alias}"%{ endif ~}
+%{ for key, value in provider_value.custom_vars }
+  ${key} = "${value}"%{ endfor ~}
+
+}
+%{ endfor ~}

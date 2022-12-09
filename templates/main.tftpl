@@ -1,0 +1,7 @@
+module "${name}" {
+  source  = "${source}"
+  version = "${version}"
+%{ for key, value in variables }
+  ${key} = ${value}%{ endfor ~}
+
+}
