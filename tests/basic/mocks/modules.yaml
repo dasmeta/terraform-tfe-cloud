@@ -1,5 +1,5 @@
 # ecrs
-ecr:
+test_ecr:
   source: "dasmeta/ecr/aws"
   version: "1.2.3"
   variables:
@@ -9,7 +9,7 @@ ecr:
       - cc
 
 # route53
-dns_dev:
+test_dns_dev:
   source: "dasmeta/dns/aws"
   version: "1.2.3"
   variables:
@@ -17,7 +17,7 @@ dns_dev:
     create_zone: true
     records: []
 
-dns_prod:
+test_dns_prod:
   source: "dasmeta/dns/aws"
   version: "1.2.3"
   variables:
@@ -26,7 +26,7 @@ dns_prod:
     records: []
 
 # clusters
-eks_dev:
+test_eks_dev:
   source: "dasmeta/eks/aws"
   version: "1.2.3"
   variables:
@@ -38,7 +38,7 @@ eks_dev:
     private_subnets: ["10.1.1.0/24", "10.1.2.0/24", "10.1.3.0/24"]
     public_subnets: ["10.1.4.0/24", "10.1.5.0/24", "10.1.6.0/24"]
 
-eks_prod:
+test_eks_prod:
   source: "dasmeta/eks/aws"
   version: "1.2.3"
   variables:

@@ -4,7 +4,7 @@ terraform {
     organization = "${terraform_cloud.org}"
 
     workspaces {
-      tags = ${terraform_cloud.workspaces_tags}
+      name = "${name}"
     }
   }
   %{ else ~}

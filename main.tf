@@ -13,6 +13,7 @@ locals {
   versions_content = templatefile(
     "${path.module}/templates/versions.tftpl",
     {
+      name              = var.name
       terraform_version = var.terraform_version
       providers = [for group in local.module_providers_grouped : {
         name                  = group[0].name
@@ -21,8 +22,8 @@ locals {
         configuration_aliases = jsonencode([for item in group : "${group[0].name}.${item.alias}" if item.alias != null])
       }]
       terraform_cloud = {
-        org             = var.terraform_cloud.org
-        workspaces_tags = jsonencode(var.terraform_cloud.workspaces_tags)
+        org             = var.workspace.org
+        workspaces_tags = jsonencode(var.workspace.tags)
       }
       terraform_backend = {
         name    = var.terraform_backend.name
@@ -74,11 +75,22 @@ resource "local_file" "this" {
 }
 
 resource "tfe_workspace" "this" {
-  count = var.terraform_cloud.generate_workspace ? 1 : 0
+  name         = var.name
+  description  = var.workspace.description
+  organization = var.workspace.org
+  tag_names    = var.workspace.tags
 
-  name              = var.name
-  organization      = var.terraform_cloud.org
-  tag_names         = var.terraform_cloud.workspaces_tags
-  vcs_repo          = var.terraform_cloud.git.repo
-  working_directory = var.terraform_cloud.git.directory
+  working_directory = "${var.workspace.directory}${var.name}"
+
+  dynamic "vcs_repo" {
+    for_each = try(var.repo.identifier, null) == null ? [] : [var.repo]
+
+    content {
+      identifier         = var.repo.identifier
+      branch             = try(var.repo.branch, null)
+      ingress_submodules = try(var.repo.ingress_submodules, null)
+      oauth_token_id     = try(var.repo.oauth_token_id, null)
+      tags_regex         = try(var.repo.tags_regex, null)
+    }
+  }
 }

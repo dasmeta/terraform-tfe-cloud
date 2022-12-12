@@ -38,17 +38,12 @@ module "this" {
     }
   ]
 
-  # terraform_cloud = {
-  #   org             = "my-terraform-cloud-org"
-  #   workspaces_tags = [each.key]
-  # }
+  workspace = {
+    org = local.terraform_cloud_org
+  }
 
-  terraform_backend = {
-    name = "s3"
-    configs = {
-      bucket = "test-state-bucket"
-      key    = "state.tfstate"
-      region = "us-east-1"
-    }
+  repo = {
+    identifier     = "${local.git_org}/${local.git_repo}"
+    oauth_token_id = tfe_oauth_client.this.oauth_token_id
   }
 }
