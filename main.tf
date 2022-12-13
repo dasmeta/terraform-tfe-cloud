@@ -1,8 +1,8 @@
 locals {
+  name_specials_clean = replace(var.name, "/\\W+/", "_")
   main_content = templatefile(
     "${path.module}/templates/main.tftpl",
     {
-      name      = var.name
       source    = var.module_source
       version   = var.module_version
       variables = { for key, value in var.module_vars : key => jsonencode(value) }
@@ -13,13 +13,13 @@ locals {
   versions_content = templatefile(
     "${path.module}/templates/versions.tftpl",
     {
-      name              = var.name
+      name              = local.name_specials_clean
       terraform_version = var.terraform_version
       providers = [for group in local.module_providers_grouped : {
         name                  = group[0].name
         version               = group[0].version
         source                = coalesce(group[0].source, "hashicorp/${group[0].name}")
-        configuration_aliases = jsonencode([for item in group : "${group[0].name}.${item.alias}" if item.alias != null])
+        configuration_aliases = replace(jsonencode([for item in group : "${group[0].name}.${item.alias}" if item.alias != null]), "\"", "")
       }]
       terraform_cloud = {
         org             = var.workspace.org
@@ -39,12 +39,7 @@ locals {
     }
   )
 
-  outputs_content = templatefile(
-    "${path.module}/templates/outputs.tftpl",
-    {
-      name = var.name
-    }
-  )
+  outputs_content = templatefile("${path.module}/templates/outputs.tftpl", {})
 
   files_to_generate = [
     {
@@ -75,7 +70,7 @@ resource "local_file" "this" {
 }
 
 resource "tfe_workspace" "this" {
-  name         = var.name
+  name         = local.name_specials_clean
   description  = var.workspace.description
   organization = var.workspace.org
   tag_names    = var.workspace.tags
@@ -93,4 +88,11 @@ resource "tfe_workspace" "this" {
       tags_regex         = try(var.repo.tags_regex, null)
     }
   }
+}
+
+resource "tfe_workspace_variable_set" "this" {
+  for_each = { for key, variable_set_id in var.variable_set_ids : key => variable_set_id }
+
+  workspace_id    = tfe_workspace.this.id
+  variable_set_id = each.value
 }

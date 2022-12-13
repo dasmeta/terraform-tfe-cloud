@@ -46,4 +46,6 @@ module "this" {
     identifier     = "${local.git_org}/${local.git_repo}"
     oauth_token_id = tfe_oauth_client.this.oauth_token_id
   }
+
+  variable_set_ids = [module.variable_set.id]
 }

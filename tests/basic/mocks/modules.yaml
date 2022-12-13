@@ -1,51 +1,39 @@
 # ecrs
-test_ecr:
-  source: "dasmeta/ecr/aws"
-  version: "1.2.3"
+0/test_ecr:
+  source: dasmeta/modules/aws//modules/ecr
+  version: 1.5.1
   variables:
-    repositories:
+    repos:
       - aa
       - bb
       - cc
 
 # route53
-test_dns_dev:
-  source: "dasmeta/dns/aws"
-  version: "1.2.3"
+1/test_dns_dev:
+  source: dasmeta/dns/aws
+  version: 1.0.0
   variables:
     zone_name: dev.example.com
     create_zone: true
     records: []
 
-test_dns_prod:
-  source: "dasmeta/dns/aws"
-  version: "1.2.3"
+1/test_dns_prod:
+  source: dasmeta/dns/aws
+  version: 1.0.0
   variables:
     zone_name: prod.example.com
     create_zone: true
     records: []
 
 # clusters
-test_eks_dev:
-  source: "dasmeta/eks/aws"
-  version: "1.2.3"
+2/test_bucket_dev:
+  source: dasmeta/modules/aws//modules/s3
+  version: 1.5.1
   variables:
-    cluster_name: "dev"
-    users: []
-    vpc_name: "dev"
-    cidr: "10.1.0.0/16"
-    availability_zones: []
-    private_subnets: ["10.1.1.0/24", "10.1.2.0/24", "10.1.3.0/24"]
-    public_subnets: ["10.1.4.0/24", "10.1.5.0/24", "10.1.6.0/24"]
+    name: dev_bucket
 
-test_eks_prod:
-  source: "dasmeta/eks/aws"
-  version: "1.2.3"
+2/test_bucket_prod:
+  source: dasmeta/modules/aws//modules/s3
+  version: 1.5.1
   variables:
-    cluster_name: "prod"
-    users: []
-    vpc_name: "prod"
-    cidr: "10.2.0.0/16"
-    availability_zones: []
-    private_subnets: ["10.2.1.0/24", "10.2.2.0/24", "10.2.3.0/24"]
-    public_subnets: ["10.2.4.0/24", "10.2.5.0/24", "10.2.6.0/24"]
+    name: prod_bucket

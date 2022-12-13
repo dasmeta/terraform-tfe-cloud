@@ -74,3 +74,9 @@ variable "repo" {
   default     = null
   description = "git/vcs repository configurations"
 }
+
+variable "variable_set_ids" {
+  type        = list(string)
+  default     = []
+  description = "The list of variable set ids to attach to workspace"
+}
