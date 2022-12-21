@@ -26,15 +26,15 @@ git config core.hooksPath githooks
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | ~> 0.40.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3 |
+| <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | ~> 0.40 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_local"></a> [local](#provider\_local) | n/a |
-| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | ~> 0.40.0 |
+| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | ~> 0.40 |
 
 ## Modules
 
@@ -63,7 +63,7 @@ No modules.
 | <a name="input_terraform_backend"></a> [terraform\_backend](#input\_terraform\_backend) | Allows to set terraform backend configurations | <pre>object({<br>    name    = string<br>    configs = optional(any, {})<br>  })</pre> | <pre>{<br>  "configs": null,<br>  "name": null<br>}</pre> | no |
 | <a name="input_terraform_version"></a> [terraform\_version](#input\_terraform\_version) | The required\_version variable value for terraform{} block in versions.tf | `string` | `">= 1.3.0"` | no |
 | <a name="input_variable_set_ids"></a> [variable\_set\_ids](#input\_variable\_set\_ids) | The list of variable set ids to attach to workspace | `list(string)` | `null` | no |
-| <a name="input_workspace"></a> [workspace](#input\_workspace) | Terraform cloud workspace configurations | <pre>object({<br>    org                 = string<br>    tags                = optional(list(string), null)<br>    description         = optional(string, null)<br>    directory           = optional(string, "./") # this is seems supposed to be the root directory of git repo<br>    global_remote_state = optional(bool, true)   # allow org workspaces access to this workspace state, TODO: there is a way to implement specific workspaces whitelisting using remote_state_consumer_ids, needs apply and testing<br><br>  })</pre> | n/a | yes |
+| <a name="input_workspace"></a> [workspace](#input\_workspace) | Terraform cloud workspace configurations | <pre>object({<br>    org                 = string<br>    tags                = optional(list(string), null)<br>    description         = optional(string, null)<br>    directory           = optional(string, "./") # this seems supposed to be the root directory of git repo<br>    global_remote_state = optional(bool, true)   # allow org workspaces access to this workspace state, TODO: there is a way to implement specific workspaces whitelisting using remote_state_consumer_ids, needs apply and testing<br><br>  })</pre> | n/a | yes |
 
 ## Outputs
 
