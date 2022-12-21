@@ -23,4 +23,3 @@ resource "tfe_workspace_variable_set" "this" {
   workspace_id    = each.value
   variable_set_id = tfe_variable_set.this.id
 }
-
