@@ -1,0 +1,11 @@
+# ecrs
+0/test_ecr:
+  source: dasmeta/empty/null
+  version: 1.0.0
+  variables: {}
+
+# route53
+1/test_dns_dev:
+  source: dasmeta/empty/null
+  version: 1.0.0
+  variables: {}

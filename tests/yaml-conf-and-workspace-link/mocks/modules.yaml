@@ -1,0 +1,36 @@
+# ecrs
+0/test_ecr:
+  source: dasmeta/modules/aws//modules/ecr
+  version: 1.5.2
+  variables:
+    repos:
+      - aa
+  providers:
+    - name: aws
+      version: ~> 4.0
+      custom_vars:
+        region: eu-central-1
+
+# route53
+1/test_dns_dev:
+  source: dasmeta/dns/aws
+  version: 1.0.0
+  variables:
+    zone: dev.devops.dasmeta.com
+    create_zone: true
+    records:
+      - name: test-record-1
+        value: ["192.168.0.2"]
+        type: A
+        target_type: standard
+      - name: test-record-2
+        value: ["${0/test_ecr.results.aa.repository_name}.example.com"]
+        type: CNAME
+        target_type: standard
+  providers:
+    - name: aws
+      version: ~> 4.0
+      custom_vars:
+        region: eu-central-1
+  linked_workspaces:
+    - 0/test_ecr

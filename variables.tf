@@ -15,10 +15,12 @@ variable "module_version" {
 
 variable "workspace" {
   type = object({
-    org         = string
-    tags        = optional(list(string), null)
-    description = optional(string, null)
-    directory   = optional(string, "./") # this is seems supposed to be the root directory of git repo
+    org                 = string
+    tags                = optional(list(string), null)
+    description         = optional(string, null)
+    directory           = optional(string, "./") # this is seems supposed to be the root directory of git repo
+    global_remote_state = optional(bool, true)   # allow org workspaces access to this workspace state, TODO: there is a way to implement specific workspaces whitelisting using remote_state_consumer_ids, needs apply and testing
+
   })
 
   description = "Terraform cloud workspace configurations"
@@ -77,6 +79,12 @@ variable "repo" {
 
 variable "variable_set_ids" {
   type        = list(string)
-  default     = []
+  default     = null
   description = "The list of variable set ids to attach to workspace"
+}
+
+variable "linked_workspaces" {
+  type        = list(string)
+  default     = null
+  description = "The list of workspaces from where we can pull outputs and use in our module variables"
 }

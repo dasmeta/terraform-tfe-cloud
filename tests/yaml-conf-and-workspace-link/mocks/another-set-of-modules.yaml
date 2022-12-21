@@ -1,0 +1,44 @@
+# this configs are not used in current test but I keep it for some advanced test case
+1/test_dns_prod:
+  source: dasmeta/dns/aws
+  version: 1.0.0
+  variables:
+    zone: prod-dasmeta.devops.dasmeta.com
+    create_zone: true
+    records: []
+  providers:
+    - name: aws
+      version: ~> 4.0
+      custom_vars:
+        region: eu-central-1
+    - name: aws
+      version: ~> 4.0
+      alias: virginia
+      custom_vars:
+        region: us-east-1
+
+
+# clusters
+2/test_bucket_dev:
+  source: dasmeta/modules/aws//modules/s3
+  version: 1.5.1
+  variables:
+    name: dev_bucket
+  providers:
+    - name: aws
+      version: ~> 4.0
+      custom_vars:
+        region: eu-central-1
+
+
+
+2/test_bucket_prod:
+  source: dasmeta/modules/aws//modules/s3
+  version: 1.5.1
+  variables:
+    name: prod_bucket
+  providers:
+    - name: aws
+      version: ~> 4.0
+      custom_vars:
+        region: eu-central-1
