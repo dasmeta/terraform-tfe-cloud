@@ -1,0 +1,16 @@
+module "this" {
+  source  = "${source}"
+  version = "${version}"
+%{ for key, value in variables }
+  ${key} = ${value}%{ endfor ~}
+
+  # TODO: seems we need to have providers block based providers we pass. check, implement and test things
+}
+
+
+data "tfe_outputs" "this" {
+  for_each = { for workspace in ${linked_workspaces} : workspace => workspace }
+
+  organization = "${workspace.org}"
+  workspace    = replace(each.value, "/\\W+/", "_")
+}
