@@ -1,3 +1,5 @@
+## ${note}
+
 %{ for provider_key, provider_value in providers }provider "${provider_value.name}" {
 %{ if provider_value.alias != null ~}
   alias = "${provider_value.alias}"%{ endif ~}

@@ -2,9 +2,13 @@ locals {
   name_specials_clean         = replace(var.name, "/[^a-zA-Z0-9_-]+/", "_")
   project_name_specials_clean = var.workspace.project != null ? replace(var.workspace.project, "/[^a-zA-Z0-9 _-]+/", "") : null
   linked_workspaces_mapping   = { for workspace in coalesce(var.linked_workspaces, []) : workspace => "data.tfe_outputs.this[\"${workspace}\"].values.results" }
+  note                        = "This file and its content are generated based on config, pleas check README.md for more details"
+
+  # main.tf file content
   main_content = templatefile(
-    "${path.module}/templates/main.tftpl",
+    "${path.module}/templates/main.tf.tftpl",
     {
+      note    = local.note
       source  = var.module_source
       version = var.module_version
       variables = { for key, value in var.module_vars : key =>
@@ -18,9 +22,11 @@ locals {
   )
 
   module_providers_grouped = { for provider in var.module_providers : provider.name => provider... }
+  # versions.tf file content
   versions_content = templatefile(
-    "${path.module}/templates/versions.tftpl",
+    "${path.module}/templates/versions.tf.tftpl",
     {
+      note              = local.note
       name              = local.name_specials_clean
       terraform_version = var.terraform_version
       providers = [for group in local.module_providers_grouped : {
@@ -40,9 +46,11 @@ locals {
     }
   )
 
+  # providers.tf file content
   providers_content = templatefile(
-    "${path.module}/templates/providers.tftpl",
+    "${path.module}/templates/providers.tf.tftpl",
     {
+      note = local.note
       providers = [for provider in var.module_providers : merge(provider, {
         custom_vars       = { for key, value in provider.custom_vars : key => jsonencode(value) if !try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false) }
         custom_var_blocks = { for key, value in try(module.provider_custom_vars_default_merged["${provider.name}${provider.alias == null ? "" : "-${provider.alias}"}"].merged) : key => value if try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false) }
@@ -50,24 +58,39 @@ locals {
     }
   )
 
-  outputs_content = templatefile("${path.module}/templates/outputs.tftpl", {})
+  # outputs.tf file content
+  outputs_content = templatefile("${path.module}/templates/outputs.tf.tftpl", { note = local.note })
+
+  # README.md file content
+  readme_content = templatefile(
+    "${path.module}/templates/README.md.tftpl",
+    {
+      workspace_name = local.name_specials_clean
+      module_source  = var.module_source
+      module_version = var.module_version
+    }
+  )
 
   files_to_generate = [
     {
-      name    = "main"
+      name    = "main.tf"
       content = local.main_content
     },
     {
-      name    = "versions"
+      name    = "versions.tf"
       content = local.versions_content
     },
     {
-      name    = "providers"
+      name    = "providers.tf"
       content = local.providers_content
     },
     {
-      name    = "outputs"
+      name    = "outputs.tf"
       content = local.outputs_content
+    },
+    {
+      name    = "README.md"
+      content = local.readme_content
     },
   ]
 
@@ -84,6 +107,8 @@ locals {
       }
     }
   }
+
+  project_id = try(tfe_project.project[0].id, var.workspace.project_id)
 }
 
 module "provider_custom_vars_default_merged" {

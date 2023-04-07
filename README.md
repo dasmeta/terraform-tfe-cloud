@@ -72,5 +72,6 @@ git config core.hooksPath githooks
 
 | Name | Description |
 |------|-------------|
-| <a name="output_debug"></a> [debug](#output\_debug) | n/a |
+| <a name="output_project_id"></a> [project\_id](#output\_project\_id) | The ID of terraform cloud project |
+| <a name="output_workspace_id"></a> [workspace\_id](#output\_workspace\_id) | The ID of created terraform cloud workspace |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

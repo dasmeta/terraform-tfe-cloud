@@ -1,6 +1,9 @@
-output "debug" {
-  value = {
-    module_providers_grouped = local.module_providers_grouped
-    provider_custom_vars     = module.provider_custom_vars_default_merged
-  }
+output "workspace_id" {
+  value       = tfe_workspace.this.id
+  description = "The ID of created terraform cloud workspace"
+}
+
+output "project_id" {
+  value       = local.project_id
+  description = "The ID of terraform cloud project"
 }
