@@ -19,13 +19,13 @@ module "this" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | ~> 0.40.0 |
+| <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | ~> 0.40 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | ~> 0.40.0 |
+| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | ~> 0.40 |
 
 ## Modules
 

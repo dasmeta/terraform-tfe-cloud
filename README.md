@@ -38,7 +38,9 @@ git config core.hooksPath githooks
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_provider_custom_vars_default_merged"></a> [provider\_custom\_vars\_default\_merged](#module\_provider\_custom\_vars\_default\_merged) | cloudposse/config/yaml//modules/deepmerge | 0.2.0 |
 
 ## Resources
 
