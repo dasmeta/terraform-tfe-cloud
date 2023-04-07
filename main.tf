@@ -6,7 +6,7 @@ resource "local_file" "this" {
 }
 
 resource "tfe_project" "project" {
-  count = var.workspace.project != "" ? 1 : 0
+  count = var.workspace.project != null ? 1 : 0
 
   organization = var.workspace.org
   name         = local.project_name_specials_clean
@@ -18,7 +18,7 @@ resource "tfe_workspace" "this" {
   organization        = var.workspace.org
   tag_names           = var.workspace.tags
   global_remote_state = var.workspace.global_remote_state
-  project_id          = tfe_project.project[0].id
+  project_id          = try(tfe_project.project[0].id, var.workspace.project_id)
   working_directory   = "${var.workspace.directory}${var.name}"
 
   dynamic "vcs_repo" {
