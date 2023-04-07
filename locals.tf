@@ -1,6 +1,7 @@
 locals {
-  name_specials_clean       = replace(var.name, "/\\W+/", "_")
-  linked_workspaces_mapping = { for workspace in coalesce(var.linked_workspaces, []) : workspace => "data.tfe_outputs.this[\"${workspace}\"].values.results" }
+  name_specials_clean         = replace(var.name, "/[^a-zA-Z0-9_-]+/", "_")
+  project_name_specials_clean = var.workspace.project != null ? replace(var.workspace.project, "/[^a-zA-Z0-9 _-]+/", "") : null
+  linked_workspaces_mapping   = { for workspace in coalesce(var.linked_workspaces, []) : workspace => "data.tfe_outputs.this[\"${workspace}\"].values.results" }
   main_content = templatefile(
     "${path.module}/templates/main.tftpl",
     {

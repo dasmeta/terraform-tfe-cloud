@@ -45,6 +45,7 @@ No modules.
 | Name | Type |
 |------|------|
 | [local_file.this](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
+| [tfe_project.project](https://registry.terraform.io/providers/hashicorp/tfe/latest/docs/resources/project) | resource |
 | [tfe_workspace.this](https://registry.terraform.io/providers/hashicorp/tfe/latest/docs/resources/workspace) | resource |
 | [tfe_workspace_variable_set.this](https://registry.terraform.io/providers/hashicorp/tfe/latest/docs/resources/workspace_variable_set) | resource |
 
@@ -63,7 +64,7 @@ No modules.
 | <a name="input_terraform_backend"></a> [terraform\_backend](#input\_terraform\_backend) | Allows to set terraform backend configurations | <pre>object({<br>    name    = string<br>    configs = optional(any, {})<br>  })</pre> | <pre>{<br>  "configs": null,<br>  "name": null<br>}</pre> | no |
 | <a name="input_terraform_version"></a> [terraform\_version](#input\_terraform\_version) | The required\_version variable value for terraform{} block in versions.tf | `string` | `">= 1.3.0"` | no |
 | <a name="input_variable_set_ids"></a> [variable\_set\_ids](#input\_variable\_set\_ids) | The list of variable set ids to attach to workspace | `list(string)` | `null` | no |
-| <a name="input_workspace"></a> [workspace](#input\_workspace) | Terraform cloud workspace configurations | <pre>object({<br>    org                 = string<br>    tags                = optional(list(string), null)<br>    description         = optional(string, null)<br>    directory           = optional(string, "./") # this seems supposed to be the root directory of git repo<br>    global_remote_state = optional(bool, true)   # allow org workspaces access to this workspace state, TODO: there is a way to implement specific workspaces whitelisting using remote_state_consumer_ids, needs apply and testing<br><br>  })</pre> | n/a | yes |
+| <a name="input_workspace"></a> [workspace](#input\_workspace) | Terraform cloud workspace configurations | <pre>object({<br>    org                 = string<br>    tags                = optional(list(string), null)<br>    description         = optional(string, null)<br>    directory           = optional(string, "./") # this seems supposed to be the root directory of git repo<br>    global_remote_state = optional(bool, true)   # allow org workspaces access to this workspace state, TODO: there is a way to implement specific workspaces whitelisting using remote_state_consumer_ids, needs apply and testing<br>    project             = optional(string, null) # name of the project to be created and where the workspace should be created<br>    project_id          = optional(string, null) # ID of the project which already exists, if none of project and project_id is provided Default Project is used for storing workspaces<br>  })</pre> | n/a | yes |
 
 ## Outputs
 

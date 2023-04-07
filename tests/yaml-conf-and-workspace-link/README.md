@@ -10,7 +10,6 @@
 the TF_VAR_github_token and GITHUB_TOKEN are same and contain user github personal access token, check the docs here:
 https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
 
-
 for TFE_TOKEN check the docs here:
 https://registry.terraform.io/providers/hashicorp/tfe/latest/docs
 
@@ -40,7 +39,7 @@ for aws access tokens you will need to have a user having api/cli access to crea
 | Name | Version |
 |------|---------|
 | <a name="provider_test"></a> [test](#provider\_test) | n/a |
-| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | 0.40.0 |
+| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | ~> 0.40.0 |
 
 ## Modules
 

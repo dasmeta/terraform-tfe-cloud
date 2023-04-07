@@ -20,7 +20,8 @@ variable "workspace" {
     description         = optional(string, null)
     directory           = optional(string, "./") # this seems supposed to be the root directory of git repo
     global_remote_state = optional(bool, true)   # allow org workspaces access to this workspace state, TODO: there is a way to implement specific workspaces whitelisting using remote_state_consumer_ids, needs apply and testing
-
+    project             = optional(string, null) # name of the project to be created and where the workspace should be created
+    project_id          = optional(string, null) # ID of the project which already exists, if none of project and project_id is provided Default Project is used for storing workspaces
   })
 
   description = "Terraform cloud workspace configurations"
