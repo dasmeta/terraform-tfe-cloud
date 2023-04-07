@@ -5,14 +5,21 @@ resource "local_file" "this" {
   filename = "${trimsuffix(var.target_dir, "/")}/${var.name}/${each.value.name}.tf"
 }
 
+resource "tfe_project" "project" {
+  count = var.workspace.project != "" ? 1 : 0
+
+  organization = var.workspace.org
+  name         = local.project_name_specials_clean
+}
+
 resource "tfe_workspace" "this" {
   name                = local.name_specials_clean
   description         = var.workspace.description
   organization        = var.workspace.org
   tag_names           = var.workspace.tags
   global_remote_state = var.workspace.global_remote_state
-
-  working_directory = "${var.workspace.directory}${var.name}"
+  project_id          = tfe_project.project[0].id
+  working_directory   = "${var.workspace.directory}${var.name}"
 
   dynamic "vcs_repo" {
     for_each = try(var.repo.identifier, null) == null ? [] : [var.repo]
