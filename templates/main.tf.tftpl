@@ -1,3 +1,5 @@
+## ${note}
+
 module "this" {
   source  = "${source}"
   version = "${version}"
@@ -12,5 +14,5 @@ data "tfe_outputs" "this" {
   for_each = { for workspace in ${linked_workspaces} : workspace => workspace }
 
   organization = "${workspace.org}"
-  workspace    = replace(each.value, "/\\W+/", "_")
+  workspace    = replace(each.value, "/[^a-zA-Z0-9_-]+/", "_")
 }

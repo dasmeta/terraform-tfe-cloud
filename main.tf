@@ -2,7 +2,7 @@ resource "local_file" "this" {
   for_each = { for file in local.files_to_generate : file.name => file }
 
   content  = each.value.content
-  filename = "${trimsuffix(var.target_dir, "/")}/${var.name}/${each.value.name}.tf"
+  filename = "${trimsuffix(var.target_dir, "/")}/${var.name}/${each.value.name}"
 }
 
 resource "tfe_project" "project" {
@@ -18,7 +18,7 @@ resource "tfe_workspace" "this" {
   organization        = var.workspace.org
   tag_names           = var.workspace.tags
   global_remote_state = var.workspace.global_remote_state
-  project_id          = try(tfe_project.project[0].id, var.workspace.project_id)
+  project_id          = local.project_id
   working_directory   = "${var.workspace.directory}${var.name}"
 
   dynamic "vcs_repo" {

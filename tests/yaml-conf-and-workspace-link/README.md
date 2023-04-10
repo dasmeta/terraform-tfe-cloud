@@ -32,14 +32,14 @@ for aws access tokens you will need to have a user having api/cli access to crea
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.41 |
 | <a name="requirement_github"></a> [github](#requirement\_github) | ~> 4.0 |
-| <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | ~> 0.40.0 |
+| <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | ~> 0.40 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_test"></a> [test](#provider\_test) | n/a |
-| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | ~> 0.40.0 |
+| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | 0.40.0 |
 
 ## Modules
 
