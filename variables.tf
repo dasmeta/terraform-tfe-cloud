@@ -46,13 +46,14 @@ variable "terraform_version" {
 }
 
 variable "module_providers" {
-  type = list(object({
-    name        = string
-    version     = string
-    source      = optional(string)
-    alias       = optional(string)
-    custom_vars = optional(any, {})
-  }))
+  type = any 
+  # object({
+  #   name        = string
+  #   version     = string
+  #   source      = optional(string)
+  #   alias       = optional(string)
+  #   custom_vars = optional(any, {})
+  # }))
   default     = []
   description = "The list of providers to add in providers.tf"
 }
