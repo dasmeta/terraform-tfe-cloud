@@ -46,7 +46,7 @@ variable "terraform_version" {
 }
 
 variable "module_providers" {
-  type = any 
+  type = any
   # object({
   #   name        = string
   #   version     = string

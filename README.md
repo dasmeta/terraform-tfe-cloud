@@ -56,7 +56,7 @@ git config core.hooksPath githooks
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_linked_workspaces"></a> [linked\_workspaces](#input\_linked\_workspaces) | The list of workspaces from where we can pull outputs and use in our module variables | `list(string)` | `null` | no |
-| <a name="input_module_providers"></a> [module\_providers](#input\_module\_providers) | The list of providers to add in providers.tf | <pre>list(object({<br>    name        = string<br>    version     = string<br>    source      = optional(string)<br>    alias       = optional(string)<br>    custom_vars = optional(any, {})<br>  }))</pre> | `[]` | no |
+| <a name="input_module_providers"></a> [module\_providers](#input\_module\_providers) | The list of providers to add in providers.tf | `any` | `[]` | no |
 | <a name="input_module_source"></a> [module\_source](#input\_module\_source) | The module source | `string` | n/a | yes |
 | <a name="input_module_vars"></a> [module\_vars](#input\_module\_vars) | The module variables | `any` | `{}` | no |
 | <a name="input_module_version"></a> [module\_version](#input\_module\_version) | The module version | `string` | n/a | yes |
