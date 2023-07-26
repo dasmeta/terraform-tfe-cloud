@@ -32,8 +32,8 @@ locals {
       providers = [for group in local.module_providers_grouped : {
         name                  = group[0].name
         version               = group[0].version
-        source                = coalesce(group[0].source, "hashicorp/${group[0].name}")
-        configuration_aliases = replace(jsonencode([for item in group : "${group[0].name}.${item.alias}" if item.alias != null]), "\"", "")
+        source                = coalesce(try(group[0].source, null), "hashicorp/${group[0].name}")
+        configuration_aliases = replace(jsonencode([for item in group : "${group[0].name}.${try(item.alias, null)}" if try(item.alias, null) != null]), "\"", "")
       }]
       terraform_cloud = {
         org             = var.workspace.org
@@ -52,8 +52,9 @@ locals {
     {
       note = local.note
       providers = [for provider in var.module_providers : merge(provider, {
-        custom_vars       = { for key, value in provider.custom_vars : key => jsonencode(value) if !try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false) }
-        custom_var_blocks = { for key, value in try(module.provider_custom_vars_default_merged["${provider.name}${provider.alias == null ? "" : "-${provider.alias}"}"].merged) : key => value if try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false) }
+        alias             = try(provider.alias, null)
+        custom_vars       = { for key, value in try(provider.custom_vars, {}) : key => jsonencode(value) if !try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false) }
+        custom_var_blocks = { for key, value in try(module.provider_custom_vars_default_merged["${provider.name}${try(provider.alias, null) == null ? "" : "-${provider.alias}"}"].merged) : key => value if try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false) }
       })]
     }
   )
@@ -113,12 +114,12 @@ locals {
 
 module "provider_custom_vars_default_merged" {
   source  = "cloudposse/config/yaml//modules/deepmerge"
-  version = "0.2.0"
+  version = "1.0.2"
 
-  for_each = { for provider in var.module_providers : "${provider.name}${provider.alias == null ? "" : "-${provider.alias}"}" => provider }
+  for_each = { for provider in var.module_providers : "${provider.name}${try(provider.alias, null) == null ? "" : "-${provider.alias}"}" => provider }
 
   maps = [
-    each.value.custom_vars,
+    try(each.value.custom_vars, {}),
     try(local.provider_custom_var_blocks[each.value.name], {})
   ]
 }
