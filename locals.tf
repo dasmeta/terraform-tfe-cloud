@@ -52,6 +52,7 @@ locals {
     {
       note = local.note
       providers = [for provider in var.module_providers : merge(provider, {
+        nested_block      = try(provider.nested_block, null)
         alias             = try(provider.alias, null)
         custom_vars       = { for key, value in try(provider.custom_vars, {}) : key => jsonencode(value) if !try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false) }
         custom_var_blocks = { for key, value in try(module.provider_custom_vars_default_merged["${provider.name}${try(provider.alias, null) == null ? "" : "-${provider.alias}"}"].merged) : key => value if try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false) }

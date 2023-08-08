@@ -1,8 +1,6 @@
 ## ${note}
 
 %{ for provider_key, provider_value in providers }provider "${provider_value.name}" {
-%{ if provider_value.nested_block != null ~}
-${provider_value.nested_block} { %{ endif ~}
 %{ if provider_value.alias != null ~}
   alias = "${provider_value.alias}"%{ endif ~}
 %{ for key, value in provider_value.custom_vars }
@@ -16,6 +14,4 @@ ${provider_value.nested_block} { %{ endif ~}
   }%{ endfor ~}
 
 }
-%{ if provider_value.nested_block != null ~}
-} %{ endif ~}
 %{ endfor ~}
