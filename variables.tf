@@ -58,6 +58,12 @@ variable "module_providers" {
   description = "The list of providers to add in providers.tf"
 }
 
+variable "output" {
+  type        = any
+  default     = []
+  description = "The module output"
+}
+
 variable "terraform_backend" {
   type = object({
     name    = string
