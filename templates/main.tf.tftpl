@@ -6,7 +6,9 @@ module "this" {
 %{ for key, value in variables }
   ${key} = ${value}%{ endfor ~}
 
-  # TODO: seems we need to have providers block based providers we pass. check, implement and test things
+%{ if module_nested_provider != null ~}
+  providers = ${jsonencode(module_nested_provider)}%{ endif ~}
+
 }
 
 

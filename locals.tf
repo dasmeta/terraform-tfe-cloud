@@ -3,14 +3,16 @@ locals {
   project_name_specials_clean = var.workspace.project != null ? replace(var.workspace.project, "/[^a-zA-Z0-9 _-]+/", "") : null
   linked_workspaces_mapping   = { for workspace in coalesce(var.linked_workspaces, []) : workspace => "data.tfe_outputs.this[\"${workspace}\"].values.results" }
   note                        = "This file and its content are generated based on config, pleas check README.md for more details"
+  module_nested_provider      = { for provider in var.module_providers : "${provider.name}${try(provider.alias, "") != "" ? ".${provider.alias}" : ""}" => "${provider.name}${try(provider.alias, "") != "" ? ".${provider.alias}" : ""}" if try(provider.module_nested_provider, false) }
 
   # main.tf file content
   main_content = templatefile(
     "${path.module}/templates/main.tf.tftpl",
     {
-      note    = local.note
-      source  = var.module_source
-      version = var.module_version
+      note                   = local.note
+      source                 = var.module_source
+      version                = var.module_version
+      module_nested_provider = local.module_nested_provider == {} ? null : local.module_nested_provider
       variables = { for key, value in var.module_vars : key =>
         format(
           replace(jsonencode(value), "/(${join("|", keys(local.linked_workspaces_mapping))})/", "%s"),
@@ -52,16 +54,27 @@ locals {
     {
       note = local.note
       providers = [for provider in var.module_providers : merge(provider, {
-        nested_block      = try(provider.nested_block, null)
-        alias             = try(provider.alias, null)
-        custom_vars       = { for key, value in try(provider.custom_vars, {}) : key => jsonencode(value) if !try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false) }
+        nested_block = try(provider.nested_block, null)
+        alias        = try(provider.alias, null)
+        custom_vars = { for key, value in try(provider.custom_vars, {}) : key =>
+          format(
+            replace(jsonencode(value), "/(${join("|", keys(local.linked_workspaces_mapping))})/", "%s"),
+            [for key in flatten(regexall("(${join("|", keys(local.linked_workspaces_mapping))})", jsonencode(value))) : try(local.linked_workspaces_mapping[key], "")]...
+          ) if !try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false)
+        }
         custom_var_blocks = { for key, value in try(module.provider_custom_vars_default_merged["${provider.name}${try(provider.alias, null) == null ? "" : "-${provider.alias}"}"].merged) : key => value if try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false) }
       })]
     }
   )
 
   # outputs.tf file content
-  outputs_content = templatefile("${path.module}/templates/outputs.tf.tftpl", { note = local.note })
+  outputs_content = templatefile(
+    "${path.module}/templates/outputs.tf.tftpl",
+    {
+      note      = local.note
+      sensitive = try(var.output.sensitive, null)
+    }
+  )
 
   # README.md file content
   readme_content = templatefile(
