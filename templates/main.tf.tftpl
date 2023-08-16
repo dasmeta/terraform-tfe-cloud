@@ -4,7 +4,7 @@ module "this" {
   source  = "${source}"
   version = "${version}"
 %{ for key, value in variables }
-  ${key} = ${value}%{ endfor ~}
+  ${key} = ${jsonencode(value)}%{ endfor ~}
 
 %{ if module_nested_provider != null ~}
   providers = ${jsonencode(module_nested_provider)}%{ endif ~}

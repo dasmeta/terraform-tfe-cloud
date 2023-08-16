@@ -1,12 +1,31 @@
 ## ${note}
 
 %{ for provider_key, provider_value in providers }provider "${provider_value.name}" {
-%{ if provider_value.nested_block != null ~}
-${provider_value.nested_block} { %{ endif ~}
 %{ if provider_value.alias != null ~}
   alias = "${provider_value.alias}"%{ endif ~}
-%{ for key, value in provider_value.custom_vars }
-  ${key} = ${value}%{ endfor ~}
+
+%{ for key, value in provider_value.variables }
+  ${key} = ${jsonencode(value)}%{ endfor ~}
+
+%{ for key, value in provider_value.blocks }
+  ${key} {
+%{ for nested_key, nested_value in value }
+
+%{ if nested_key != "blocks" ~}
+${nested_key} = ${jsonencode(nested_value)}%{ endif ~}%{ endfor ~}
+
+%{ if try(value.blocks,null) != null ~}
+
+%{ for key1, value1 in value.blocks }
+${key1} {
+  %{ for nested_key1, nested_value1 in value1 }
+  ${nested_key1} = ${jsonencode(nested_value1)}
+  %{ endfor ~}
+}
+%{ endfor ~}
+%{ endif ~}
+
+  }%{ endfor ~}
 
 %{ for key, value in provider_value.custom_var_blocks }
   ${key} {
@@ -16,6 +35,4 @@ ${provider_value.nested_block} { %{ endif ~}
   }%{ endfor ~}
 
 }
-%{ if provider_value.nested_block != null ~}
-} %{ endif ~}
 %{ endfor ~}

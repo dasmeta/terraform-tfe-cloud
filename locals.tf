@@ -1,7 +1,7 @@
 locals {
   name_specials_clean         = replace(var.name, "/[^a-zA-Z0-9_-]+/", "_")
   project_name_specials_clean = var.workspace.project != null ? replace(var.workspace.project, "/[^a-zA-Z0-9 _-]+/", "") : null
-  linked_workspaces_mapping   = { for workspace in coalesce(var.linked_workspaces, []) : workspace => "data.tfe_outputs.this[\"${workspace}\"].values.results" }
+  linked_workspaces_mapping   = { for workspace in coalesce(var.linked_workspaces, []) : workspace => "data.tfe_outputs.this[\\\"${workspace}\\\"].values.results" }
   note                        = "This file and its content are generated based on config, pleas check README.md for more details"
   module_nested_provider      = { for provider in var.module_providers : "${provider.name}${try(provider.alias, "") != "" ? ".${provider.alias}" : ""}" => "${provider.name}${try(provider.alias, "") != "" ? ".${provider.alias}" : ""}" if try(provider.module_nested_provider, false) }
 
@@ -14,10 +14,10 @@ locals {
       version                = var.module_version
       module_nested_provider = local.module_nested_provider == {} ? null : local.module_nested_provider
       variables = { for key, value in var.module_vars : key =>
-        format(
+        jsondecode(format(
           replace(jsonencode(value), "/(${join("|", keys(local.linked_workspaces_mapping))})/", "%s"),
           [for key in flatten(regexall("(${join("|", keys(local.linked_workspaces_mapping))})", jsonencode(value))) : try(local.linked_workspaces_mapping[key], "")]...
-      ) }
+      )) }
       linked_workspaces = jsonencode(coalesce(var.linked_workspaces, []))
       workspace         = var.workspace
     }
@@ -54,13 +54,18 @@ locals {
     {
       note = local.note
       providers = [for provider in var.module_providers : merge(provider, {
-        nested_block = try(provider.nested_block, null)
-        alias        = try(provider.alias, null)
-        custom_vars = { for key, value in try(provider.custom_vars, {}) : key =>
-          format(
+        alias = try(provider.alias, null)
+        variables = { for key, value in try(provider.variables, {}) : key =>
+          jsondecode(format(
             replace(jsonencode(value), "/(${join("|", keys(local.linked_workspaces_mapping))})/", "%s"),
             [for key in flatten(regexall("(${join("|", keys(local.linked_workspaces_mapping))})", jsonencode(value))) : try(local.linked_workspaces_mapping[key], "")]...
-          ) if !try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false)
+          )) if !try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false)
+        }
+        blocks = { for key, value in try(provider.blocks, {}) : key =>
+          jsondecode(format(
+            replace(jsonencode(value), "/(${join("|", keys(local.linked_workspaces_mapping))})/", "%s"),
+            [for key in flatten(regexall("(${join("|", keys(local.linked_workspaces_mapping))})", jsonencode(value))) : try(local.linked_workspaces_mapping[key], "")]...
+          )) if !try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false)
         }
         custom_var_blocks = { for key, value in try(module.provider_custom_vars_default_merged["${provider.name}${try(provider.alias, null) == null ? "" : "-${provider.alias}"}"].merged) : key => value if try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false) }
       })]
@@ -133,7 +138,19 @@ module "provider_custom_vars_default_merged" {
   for_each = { for provider in var.module_providers : "${provider.name}${try(provider.alias, null) == null ? "" : "-${provider.alias}"}" => provider }
 
   maps = [
-    try(each.value.custom_vars, {}),
+    try(each.value.variables, {}),
     try(local.provider_custom_var_blocks[each.value.name], {})
   ]
+}
+
+
+output "test-data" {
+  value = [for provider in var.module_providers : merge(provider, {
+    blocks = { for key, value in try(provider.blocks, {}) : key =>
+      format(
+        replace(jsonencode(value), "/(${join("|", keys(local.linked_workspaces_mapping))})/", "%s"),
+        [for key in flatten(regexall("(${join("|", keys(local.linked_workspaces_mapping))})", jsonencode(value))) : try(local.linked_workspaces_mapping[key], "")]...
+      ) if !try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false)
+    }
+  })]
 }
