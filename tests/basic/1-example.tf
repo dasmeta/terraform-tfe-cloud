@@ -1,7 +1,11 @@
+terraform {
+  backend "remote" {}
+}
+
 module "basic" {
   source = "../.."
 
-  org   = "test-organisation"
+  org   = "dasmeta-testing"
   token = "test-token"
 
   config = {
