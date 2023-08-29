@@ -1,92 +1,129 @@
-variable "name" {
+/**
+ * The variables can be set in ./terraform.tfvars file or by env variables:
+
+ export TF_VAR_{variable-name}=xxxxxxxxxxxxxxx
+**/
+# for TFE setup
+variable "org" {
   type        = string
-  description = "module/repo-folder/workspace name and uniq identifier"
+  description = "The terraform cloud org name"
+}
+variable "token" {
+  type        = string
+  description = "The terraform cloud token"
 }
 
-variable "module_source" {
-  type        = string
-  description = "The module source"
-}
-
-variable "module_version" {
-  type        = string
-  description = "The module version"
-}
-
-variable "workspace" {
+# For code generation
+variable "config" {
   type = object({
-    org                 = string
-    tags                = optional(list(string), null)
-    description         = optional(string, null)
-    directory           = optional(string, "./") # this seems supposed to be the root directory of git repo
-    global_remote_state = optional(bool, true)   # allow org workspaces access to this workspace state, TODO: there is a way to implement specific workspaces whitelisting using remote_state_consumer_ids, needs apply and testing
-    project             = optional(string, null) # name of the project to be created and where the workspace should be created
-    project_id          = optional(string, null) # ID of the project which already exists, if none of project and project_id is provided Default Project is used for storing workspaces
+    yaml_dir   = string
+    target_dir = string
+    root       = string
   })
 
-  description = "Terraform cloud workspace configurations"
+  default = {
+    yaml_dir   = "."
+    target_dir = "./"
+    root       = "./_terraform/"
+  }
+  # variable "yaml_dir" {
+  #   type        = string
+  #   default     = "."
+  #   description = "The directory where yamls located"
+  # }
+
+  # variable "target_dir" {
+  #   type        = string
+  #   default     = "./"
+  #   description = "The directory where tf cloud workspace corresponding workspaces will be created"
+  # }
+
+  # variable "workspace_directory_root" {
+  #   type        = string
+  #   default     = "./_terraform/"
+  #   description = "The directory on git repo where the workspaces creator main.tf file located "
+  # }
 }
 
-variable "module_vars" {
-  type        = any
-  default     = {}
-  description = "The module variables"
+# SCM
+locals {
+  scm_providers = {
+    github = {
+      http_url = "https://github.com"
+      api_url  = "https://api.github.com"
+      provider = "github"
+    }
+    gitlab = {
+      http_url = "https://gitlab.com"
+      api_url  = "https://gitlab.com/api/v4"
+      provider = "gitlab_hosted"
+    }
+  }
 }
 
-variable "target_dir" {
-  type        = string
-  default     = "./"
-  description = "The directory where new module folder will be created, this will be terraform project repository root url"
-}
-
-variable "terraform_version" {
-  type        = string
-  default     = ">= 1.3.0"
-  description = "The required_version variable value for terraform{} block in versions.tf"
-}
-
-variable "module_providers" {
-  type = any
-  # object({
-  #   name        = string
-  #   version     = string
-  #   source      = optional(string)
-  #   alias       = optional(string)
-  #   custom_vars = optional(any, {})
-  # }))
-  default     = []
-  description = "The list of providers to add in providers.tf"
-}
-
-variable "terraform_backend" {
+variable "scm" {
   type = object({
-    name    = string
-    configs = optional(any, {})
+    provider   = string
+    org        = string
+    repo       = string
+    auth_token = string
   })
-  default     = { name = null, configs = null }
-  description = "Allows to set terraform backend configurations"
+
+  default = {
+    provider   = "github" # gitlab|bitbucket|...
+    org        = "awesome-organisation"
+    repo       = "awesome-infrastructure"
+    auth_token = "54678976566tr7z8u9zt7z8"
+  }
+
+  # variable "git_service_provider" {
+  #   type        = string
+  #   default     = "gitlab_hosted"
+  #   description = "The vsc(github, gitlab, ...) provider id"
+  # }
+  # variable "git_http_url" {
+  #   type        = string
+  #   default     = "https://gitlab.com"
+  #   description = "The vsc(github, gitlab, ...) url"
+  # }
+  # variable "git_api_url" {
+  #   type        = string
+  #   default     = "https://gitlab.com/api/v4"
+  #   description = "The vsc(github, gitlab, ...) url"
+  # }
+  # variable "git_org" {
+  #   type        = string
+  #   description = "The github org/owner name"
+  # }
+  # variable "git_repo" {
+  #   type        = string
+  #   description = "The github repo name without org prefix"
+  # }
+  # variable "git_auth_token" {
+  #   type        = string
+  #   description = "The vsc(github, gitlab, ...) personal access token"
+  # }
 }
 
-variable "repo" {
-  type = object({
-    identifier         = string                  # <organization>/<repository> format repo identifier
-    branch             = optional(string, null)  # will default to repo default branch if not set
-    ingress_submodules = optional(string, false) # whether to fetch submodules a]when cloning vcs
-    oauth_token_id     = optional(string, null)  # the auth token generated by resource tfe_oauth_client
-    tags_regex         = optional(string, null)  # regular expression used to trigger Workspace run for matching Git tags
-  })
-  default     = null
-  description = "git/vcs repository configurations"
-}
-
-variable "variable_set_ids" {
-  type        = list(string)
-  default     = null
-  description = "The list of variable set ids to attach to workspace"
-}
-
-variable "linked_workspaces" {
-  type        = list(string)
-  default     = null
-  description = "The list of workspaces from where we can pull outputs and use in our module variables"
+# Cloud Access (goes to shared variable set, should be adjusted)
+variable "aws" {
+  type = map(any)
+  default = {
+    access_key_id     = ""
+    secret_access_key = ""
+    default_region    = ""
+  }
+  # variable "aws_access_key_id" {
+  #   type        = string
+  #   description = "The aws user access key"
+  # }
+  # variable "aws_secret_access_key" {
+  #   type        = string
+  #   description = "The aws user secret access key"
+  # }
+  # variable "aws_default_region" {
+  #   type        = string
+  #   default     = "eu-central-1"
+  #   description = "The aws default region"
+  # }
 }
