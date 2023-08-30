@@ -22,7 +22,7 @@ variable "yamldir" {
 
 variable "targetdir" {
   type        = string
-  default     = "./"
+  default     = "./../_terraform/"
   description = "The directory where tf cloud workspace corresponding workspaces will be created"
 }
 
