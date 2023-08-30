@@ -15,7 +15,7 @@ module "workspaces" {
   source = "git::https://github.com/dasmeta/terraform-tfe-cloud.git?ref=DMVP-fix-var"
 
   # for_each = { for key, item in yamldecode(file("./infra.yaml")) : key => item } # single file mode
-  for_each = local.yamlfiles # folder with files mode
+  for_each = local.yaml_files # folder with files mode
 
   name           = each.key
   module_source  = each.value.source
