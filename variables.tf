@@ -14,35 +14,22 @@ variable "token" {
 }
 
 # For code generation
-variable "config" {
-  type = object({
-    yamldir   = string
-    targetdir = string
-    root      = string
-  })
+variable "yamldir" {
+  type        = string
+  default     = "."
+  description = "The directory where yamls located"
+}
 
-  default = {
-    yamldir   = "."
-    targetdir = "./"
-    root      = "./_terraform/"
-  }
-  # variable "yaml_dir" {
-  #   type        = string
-  #   default     = "."
-  #   description = "The directory where yamls located"
-  # }
+variable "targetdir" {
+  type        = string
+  default     = "./"
+  description = "The directory where tf cloud workspace corresponding workspaces will be created"
+}
 
-  # variable "target_dir" {
-  #   type        = string
-  #   default     = "./"
-  #   description = "The directory where tf cloud workspace corresponding workspaces will be created"
-  # }
-
-  # variable "workspace_directory_root" {
-  #   type        = string
-  #   default     = "./_terraform/"
-  #   description = "The directory on git repo where the workspaces creator main.tf file located "
-  # }
+variable "rootdir" {
+  type        = string
+  default     = "./_terraform/"
+  description = "The directory on git repo where the workspaces creator main.tf file located "
 }
 
 # SCM

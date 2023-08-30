@@ -1,8 +1,8 @@
 locals {
   yaml_files_raw = { for file in fileset(
-    "${path.module}/${var.config.yamldir}",
+    "${path.module}/${var.yamldir}",
     "**/*.yaml"
-  ) : replace(file, "/.yaml$/", "") => yamldecode(file("${var.config.yamldir}/${file}")) }
+  ) : replace(file, "/.yaml$/", "") => yamldecode(file("${var.yamldir}/${file}")) }
 
   yaml_files = { for key, item in local.yaml_files_raw : key => item
   if try(item.source, null) != null && try(item.version, null) != null }
@@ -22,14 +22,14 @@ module "workspaces" {
   module_version = each.value.version
   module_vars    = each.value.variables
   output         = try(each.value.output, null)
-  target_dir     = var.config.targetdir
+  target_dir     = var.targetdir
 
   module_providers  = try(each.value.providers, [])
   linked_workspaces = try(each.value.linked_workspaces, null)
 
   workspace = {
     org       = var.org
-    directory = var.config.root
+    directory = var.rootdir
   }
 
   repo = {
