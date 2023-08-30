@@ -1,0 +1,6 @@
+terraform_cloud_org: dasmeta-testing
+terraform_cloud_workspace: terraform-tfe-cloud-test
+
+git_provider: github
+git_org: dasmeta-testing
+git_repo: test-infrastructure

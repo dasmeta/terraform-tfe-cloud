@@ -5,7 +5,7 @@ variables:
     enabled: true
     slack_webhooks:
       - hook_url: ${0-account/secret-reader.secrets.MONITORING_SLACK_HOOK_URL}
-        channel: pushmetrics-monitoring
+        channel: test-monitoring
         username: reporter
     web_endpoints:
       - ${0-account/secret-reader.secrets.MONITORING_OPSGENIE_HOOK_URL_HIGH}
@@ -13,7 +13,7 @@ variables:
     enabled: true
     slack_webhooks:
       - hook_url: ${0-account/secret-reader.secrets.MONITORING_SLACK_HOOK_URL}
-        channel: pushmetrics-monitoring
+        channel: test-monitoring
         username: reporter2
     web_endpoints:
       - ${0-account/secret-reader.secrets.MONITORING_OPSGENIE_HOOK_URL_HIGH}
@@ -38,7 +38,7 @@ providers:
       region: eu-central-1
       default_tags:
         tags:
-          Account: pushmetrics
+          Account: test
           ManageLevel: account
   - name: aws
     alias: virginia
@@ -48,9 +48,9 @@ providers:
       region: us-east-1
       default_tags:
         tags:
-          Account: pushmetrics
+          Account: test
           Environment: stage
-          Product: pushmetrics
+          Product: test
           ManageLevel: product
 linked_workspaces:
     - 0-account/root/secret-reader

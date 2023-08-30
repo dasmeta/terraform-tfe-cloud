@@ -33,3 +33,6 @@ override.tf.json
 
 .DS_Store
 _tfc
+.terraform
+**/*.tfbackend
+**/terraform.tfvars

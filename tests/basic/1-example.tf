@@ -8,11 +8,9 @@ module "basic" {
   org   = "dasmeta-testing"
   token = "test-token"
 
-  config = {
-    root       = "_terraform"
-    target_dir = "_terraform"
-    yaml_dir   = "example-infra"
-  }
+  rootdir   = "_terraform"
+  targetdir = "_terraform"
+  yamldir   = "example-infra"
 
   git_token    = "value"
   git_org      = "dasmeta"
