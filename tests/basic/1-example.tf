@@ -14,10 +14,8 @@ module "basic" {
     yaml_dir   = "example-infra"
   }
 
-  scm = {
-    token    = "value"
-    org      = "dasmeta"
-    provider = "github"
-    repo     = "test-infrastructure"
-  }
+  git_token    = "value"
+  git_org      = "dasmeta"
+  git_provider = "github"
+  git_repo     = "test-infrastructure"
 }

@@ -33,7 +33,7 @@ module "workspaces" {
   }
 
   repo = {
-    identifier     = "${var.scm.org}/${var.scm.repo}"
+    identifier     = "${var.git_org}/${var.git_repo}"
     oauth_token_id = tfe_oauth_client.this.oauth_token_id
   }
 
