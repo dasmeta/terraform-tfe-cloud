@@ -13,4 +13,11 @@ module "basic" {
     target_dir = "_terraform"
     yaml_dir   = "example-infra"
   }
+
+  scm = {
+    token    = "value"
+    org      = "dasmeta"
+    provider = "github"
+    repo     = "test-infrastructure"
+  }
 }

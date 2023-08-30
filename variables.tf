@@ -61,48 +61,23 @@ locals {
   }
 }
 
-variable "scm" {
-  type = object({
-    provider   = string
-    org        = string
-    repo       = string
-    auth_token = string
-  })
+variable "git_provider" {
+  type        = string
+  default     = "gitlab"
+  description = "The vsc(github, gitlab, ...) provider id"
+}
 
-  default = {
-    provider   = "github" # gitlab|bitbucket|...
-    org        = "awesome-organisation"
-    repo       = "awesome-infrastructure"
-    auth_token = "54678976566tr7z8u9zt7z8"
-  }
-
-  # variable "git_service_provider" {
-  #   type        = string
-  #   default     = "gitlab_hosted"
-  #   description = "The vsc(github, gitlab, ...) provider id"
-  # }
-  # variable "git_http_url" {
-  #   type        = string
-  #   default     = "https://gitlab.com"
-  #   description = "The vsc(github, gitlab, ...) url"
-  # }
-  # variable "git_api_url" {
-  #   type        = string
-  #   default     = "https://gitlab.com/api/v4"
-  #   description = "The vsc(github, gitlab, ...) url"
-  # }
-  # variable "git_org" {
-  #   type        = string
-  #   description = "The github org/owner name"
-  # }
-  # variable "git_repo" {
-  #   type        = string
-  #   description = "The github repo name without org prefix"
-  # }
-  # variable "git_auth_token" {
-  #   type        = string
-  #   description = "The vsc(github, gitlab, ...) personal access token"
-  # }
+variable "git_org" {
+  type        = string
+  description = "The github org/owner name"
+}
+variable "git_repo" {
+  type        = string
+  description = "The github repo name without org prefix"
+}
+variable "git_token" {
+  type        = string
+  description = "The vsc(github, gitlab, ...) personal access token"
 }
 
 # Cloud Access (goes to shared variable set, should be adjusted)
