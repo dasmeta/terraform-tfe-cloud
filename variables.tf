@@ -16,15 +16,15 @@ variable "token" {
 # For code generation
 variable "config" {
   type = object({
-    yaml_dir   = string
-    target_dir = string
-    root       = string
+    yamldir   = string
+    targetdir = string
+    root      = string
   })
 
   default = {
-    yaml_dir   = "."
-    target_dir = "./"
-    root       = "./_terraform/"
+    yamldir   = "."
+    targetdir = "./"
+    root      = "./_terraform/"
   }
   # variable "yaml_dir" {
   #   type        = string
