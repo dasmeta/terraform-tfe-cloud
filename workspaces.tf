@@ -1,8 +1,11 @@
 locals {
-  yaml_files_raw = { for file in fileset(
-    var.yamldir,
-    "**/*.yaml"
-  ) : replace(file, "/.yaml$/", "") => try(yamldecode(file("${var.yamldir}/${file}")), {}) }
+  yaml_files_raw = {
+    for file in fileset(
+      var.yamldir,
+      "**/*.yaml"
+    ) : replace(file, "/.yaml$/", "") => try(yamldecode(file("${var.yamldir}/${file}")), {})
+    if length(regexall("\\.terraform", file)) <= 0 # exclude files coming from .terraform folder
+  }
 
   yaml_files = { for key, item in local.yaml_files_raw : key => item
   if try(item.source, null) != null && try(item.version, null) != null }
