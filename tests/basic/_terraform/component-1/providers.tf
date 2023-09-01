@@ -8,7 +8,7 @@ provider "aws" {
 
   default_tags {
 
-    tags = {"Account":"pushmetrics","AppliedFrom":"terraform-cloud","ManageLevel":"account","ManagedBy":"terraform","TerraformCloudWorkspace":"component-1","TerraformModuleSource":"dasmeta/account/aws","TerraformModuleVersion":"1.2.2"}
+    tags = {"Account":"test","AppliedFrom":"terraform-cloud","ManageLevel":"account","ManagedBy":"terraform","TerraformCloudWorkspace":"component-1","TerraformModuleSource":"dasmeta/account/aws","TerraformModuleVersion":"1.2.2"}
   }
 }
 provider "aws" {
@@ -19,6 +19,6 @@ provider "aws" {
 
   default_tags {
 
-    tags = {"Account":"pushmetrics","AppliedFrom":"terraform-cloud","Environment":"stage","ManageLevel":"product","ManagedBy":"terraform","Product":"pushmetrics","TerraformCloudWorkspace":"component-1","TerraformModuleSource":"dasmeta/account/aws","TerraformModuleVersion":"1.2.2"}
+    tags = {"Account":"test","AppliedFrom":"terraform-cloud","Environment":"stage","ManageLevel":"product","ManagedBy":"terraform","Product":"test","TerraformCloudWorkspace":"component-1","TerraformModuleSource":"dasmeta/account/aws","TerraformModuleVersion":"1.2.2"}
   }
 }
