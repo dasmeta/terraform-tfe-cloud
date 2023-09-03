@@ -12,10 +12,7 @@ locals {
 }
 
 module "workspaces" {
-  # source  = "dasmeta/cloud/tfe"
-  # version = "1.0.4"
-  # source = "/Users/juliaaghamyan/Desktop/dasmeta/terraform-tfe-cloud/"
-  source = "git::https://github.com/dasmeta/terraform-tfe-cloud.git?ref=DMVP-fix-var"
+  source = "./modules/workspace"
 
   # for_each = { for key, item in yamldecode(file("./infra.yaml")) : key => item } # single file mode
   for_each = local.yaml_files # folder with files mode

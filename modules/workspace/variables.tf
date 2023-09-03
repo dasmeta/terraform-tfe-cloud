@@ -95,12 +95,3 @@ variable "output" {
   default     = []
   description = "The module output"
 }
-
-variable "terraform_backend" {
-  type = object({
-    name    = string
-    configs = optional(any, {})
-  })
-  default     = { name = null, configs = null }
-  description = "Allows to set terraform backend configurations"
-}
