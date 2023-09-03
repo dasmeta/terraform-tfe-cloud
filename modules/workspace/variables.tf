@@ -90,3 +90,18 @@ variable "linked_workspaces" {
   default     = null
   description = "The list of workspaces from where we can pull outputs and use in our module variables"
 }
+
+variable "output" {
+  type        = any
+  default     = []
+  description = "The module output"
+}
+
+variable "terraform_backend" {
+  type = object({
+    name    = string
+    configs = optional(any, {})
+  })
+  default     = { name = null, configs = null }
+  description = "Allows to set terraform backend configurations"
+}

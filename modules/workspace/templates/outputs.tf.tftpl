@@ -2,4 +2,7 @@
 
 output "results" {
   value = module.this
+%{ if sensitive != null ~}
+  sensitive = ${sensitive}%{ endif ~}
+
 }
