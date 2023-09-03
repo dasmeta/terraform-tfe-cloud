@@ -1,7 +1,6 @@
 # create variable set
 module "aws_credentials_variable_set" {
-  source  = "dasmeta/cloud/tfe//modules/variable-set"
-  version = "1.0.2"
+  source = "./modules/variable-set"
 
   name = "aws_credentials"
   org  = var.org
