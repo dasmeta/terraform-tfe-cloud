@@ -1,6 +1,6 @@
 variable "name" {
   type        = string
-  description = "module/repo-folder/workspace name and uniq identifier"
+  description = "module/repo-folder/workspace name and unique identifier"
 }
 
 variable "module_source" {
@@ -23,7 +23,6 @@ variable "workspace" {
     project             = optional(string, null) # name of the project to be created and where the workspace should be created
     project_id          = optional(string, null) # ID of the project which already exists, if none of project and project_id is provided Default Project is used for storing workspaces
   })
-
   description = "Terraform cloud workspace configurations"
 }
 
