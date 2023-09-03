@@ -1,0 +1,6 @@
+source: dasmeta/null/empty
+version: v1.2.0
+variables:
+  first-string: ${first-module.fourth-list-variable}
+linked_workspaces:
+  - first-module

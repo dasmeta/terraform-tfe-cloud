@@ -1,0 +1,40 @@
+# source: dasmeta/eks/aws
+# version: 2.8.0-1
+# variables:
+#   # Account id
+#   account_id: "565580475168"
+#   cluster_name: "eks-dev"
+#   cluster_version: "1.27"
+#   send_alb_logs_to_cloudwatch: false
+#   # users:
+#   # map_roles:
+#   metrics_exporter: "adot"
+#   adot_config:
+#     accept_namespace_regex: "(default|kube-system)"
+#     additional_metrics: []
+#   cluster_enabled_log_types: ["audit"]
+#   vpc:
+#     link:
+#       id: ${1-environments/dev-1/vpc.id}
+#       private_subnet_ids: ${1-environments/dev-1/vpc.private_subnets}
+#   node_groups:
+#     dev_nodes:
+#       max_capacity: 1
+#       min_size: 1
+#       max_size: 1
+#       desired_size: 1
+#   node_groups_default:
+#     instance_types: ["t3.medium"]
+#     capacity_type: "SPOT"
+# providers:
+#   - name: aws
+#     version: ~> 4.0
+#     module_nested_provider: true
+#     variables:
+#       region: eu-central-1
+#       default_tags:
+#         tags:
+#           Account: boilerplate
+#           ManageLevel: environment
+# linked_workspaces:
+#     - 1-environments/dev-1/vpc
