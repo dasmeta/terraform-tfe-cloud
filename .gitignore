@@ -36,3 +36,4 @@ _tfc
 .terraform
 **/*.tfbackend
 **/terraform.tfvars
+**/_terraform
