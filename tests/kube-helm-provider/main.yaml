@@ -20,10 +20,10 @@ variables:
       memory: null
     requests:
       cpu: null
-      memory: null    
+      memory: null
   readinessprobe_initialdelayseconds: 5
   livenessprobe_initialdelayseconds: 30
-  architecture: "replicaset"  
+  architecture: "replicaset"
 providers:
   - name: aws
     version: ">= 4.0"
@@ -51,23 +51,22 @@ providers:
           "get-token", "--cluster-name", local.cluster_name
         ]
         command: "aws"
-
   - name: helm
     version: "2.10.1"
     source: "hashicorp/helm"
     blocks:
-      kubernetes: 
+      kubernetes:
         cluster_ca_certificate: ${2-product/dasmeta/eks-data.ca_certificate}
         host: ${2-product/dasmeta/eks-data.host}
         blocks:
           exec:
-              api_version: "client.authentication.k8s.io/v1beta1"
-              args: [
-                "eks",
-                "--region", var.region,
-                "get-token", "--cluster-name", local.cluster_name
-              ]
-              command: "aws"
+            api_version: "client.authentication.k8s.io/v1beta1"
+            args: [
+              "eks",
+              "--region", var.region,
+              "get-token", "--cluster-name", local.cluster_name
+            ]
+            command: "aws"
 linked_workspaces:
-    - 2-product/dasmeta/eks-data
-    - 2-product/dasmeta/secret-reader-infra
+  - 2-product/dasmeta/eks-data
+  - 2-product/dasmeta/secret-reader-infra

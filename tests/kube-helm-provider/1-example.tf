@@ -1,17 +1,20 @@
+variable "tfc_token" {}
+variable "git_token" {}
+
 module "basic" {
   source = "../.."
 
   org   = "dasmeta-testing"
-  token = "ojODA5TvvwpL1A.atlasv1.6ifl0D5Q3zaonS3GPc5aXSLo4HWxCScaXf3u0sSVy4Eb4I62HAcs75W9l4EO9iBkFyE"
+  token = var.tfc_token
 
   rootdir   = "_terraform"
   targetdir = "_terraform"
-  yamldir   = "example-infra"
+  yamldir   = "."
 
   git_provider = "github"
   git_org      = "dasmeta-testing"
   git_repo     = "test-infrastructure"
-  git_token    = "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"
+  git_token    = var.git_token
 
   aws = {
     access_key_id     = ""

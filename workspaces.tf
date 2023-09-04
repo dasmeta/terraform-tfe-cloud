@@ -20,7 +20,7 @@ module "workspaces" {
   name           = each.key
   module_source  = each.value.source
   module_version = each.value.version
-  module_vars    = each.value.variables
+  module_vars    = try(each.value.variables, [])
   output         = try(each.value.output, null)
   target_dir     = var.targetdir
 

@@ -5,21 +5,21 @@
   alias = "${provider_value.alias}"%{ endif ~}
 
 %{ for key, value in provider_value.variables }
-  ${key} = ${jsonencode(value)}%{ endfor ~}
+  ${key} = ${replace(jsonencode(value), "\\", "")}%{ endfor ~}
 
 %{ for key, value in provider_value.blocks }
   ${key} {
 %{ for nested_key, nested_value in value }
 
 %{ if nested_key != "blocks" ~}
-${nested_key} = ${jsonencode(nested_value)}%{ endif ~}%{ endfor ~}
+${nested_key} = ${replace(jsonencode(nested_value), "\\", "")}%{ endif ~}%{ endfor ~}
 
 %{ if try(value.blocks,null) != null ~}
 
 %{ for key1, value1 in value.blocks }
 ${key1} {
   %{ for nested_key1, nested_value1 in value1 }
-  ${nested_key1} = ${jsonencode(nested_value1)}
+  ${nested_key1} = ${replace(jsonencode(nested_value1), "\\", "")}
   %{ endfor ~}
 }
 %{ endfor ~}
@@ -30,7 +30,7 @@ ${key1} {
 %{ for key, value in provider_value.custom_var_blocks }
   ${key} {
 %{ for nested_key, nested_value in value }
-    ${nested_key} = ${jsonencode(nested_value)}%{ endfor ~}
+    ${nested_key} = ${replace(jsonencode(nested_value), "\\", "")}%{ endfor ~}
 
   }%{ endfor ~}
 
