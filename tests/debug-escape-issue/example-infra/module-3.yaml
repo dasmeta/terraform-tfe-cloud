@@ -1,0 +1,42 @@
+source: dasmeta/null/empty
+version: 1.2.1
+variables:
+  static: "Vahagn"
+  variable-1: "Vahagn ${module-1.variable-1}" # => "Vahagn ${data.tfe_outputs.this["module-1"].values.variable-1}"
+                                       # module-1 => data.tfe_outputs.this["module-1"].values
+                                       # result: "${data.tfe_outputs.this[\"module-1\"].values.result.variable-1}"
+  variable-2: "something ${module-1.variable-1} and ${module-2.variable-1} else"
+  variable-3: "module 2 ${module-2.variable-1} else"
+  variable-4: "module 1 ${module-1.variable-1} else"
+  variable-list-5: [
+    "module 2 ${module-2.variable-1} else",
+    "module 1 ${module-1.variable-1} else"
+  ]
+  variable-object-6: {
+    "module 2 ${module-2.variable-1} else": "module 1 ${module-1.variable-1} else"
+  }
+  variable-7: "module 1 ${module-3.variable-1} else" # => "module 1 ${module-3.variable-1} else"
+linked_workspaces:
+  - module-1
+  - module-2
+  - 1-environments/dev-1/eks
+providers:
+  - name: kubernetes
+    version: ~> 2.23
+    module_nested_provider: true
+    source: "hashicorp/kubernetes"
+    variables:
+      cluster_ca_certificate: ${1-environments/dev-1/eks.cluster_certificate}
+      host: ${1-environments/dev-1/eks.cluster_host}
+      token: ${1-environments/dev-1/eks.cluster_token}
+    blocks:
+      exec:
+        api_version: "client.authentication.k8s.io/v1beta1"
+        args:
+          - "eks"
+          - "--region"
+          - "eu-central-1"
+          - "get-token"
+          - "--cluster-name"
+          - ${1-environments/dev-1/eks.cluster_name}
+        command: "aws"

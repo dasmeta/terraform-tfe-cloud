@@ -1,0 +1,4 @@
+asdqwe
+
+%{ for key, value in variables }
+  ${key} = ${replace(jsonencode(value), "\\", "")}%{ endfor ~}
