@@ -1,0 +1,73 @@
+source: dasmeta/modules/aws//modules/mongodb
+version: 0.36.13
+variables:
+  name: mongodb-replicaset-staging
+  root_password: password
+  replicaset_key: replicasetkey
+  image_tag: "4.2.12-debian-10-r41"
+  persistence_size: "20Gi"
+  persistence_annotations: null
+  resources:
+    limits:
+      cpu: 800m
+      memory: 2G
+    requests:
+      cpu: 700m
+      memory: 1800M
+  arbiter_resources:
+    limits:
+      cpu: null
+      memory: null
+    requests:
+      cpu: null
+      memory: null    
+  readinessprobe_initialdelayseconds: 5
+  livenessprobe_initialdelayseconds: 30
+  architecture: "replicaset"  
+providers:
+  - name: aws
+    version: ">= 4.0"
+    custom_vars:
+      region: eu-central-1
+      default_tags:
+        tags:
+          Account: dasmeta
+          Environment: stage
+          Product: dasmeta
+          ManageLevel: product
+  - name: kubectl
+    version: "1.14.0"
+    source: "gavinbunney/kubectl"
+    variables:
+      cluster_ca_certificate: ${2-product/dasmeta/eks-data.ca_certificate}
+      host: ${2-product/dasmeta/eks-data.host}
+      token: ${2-product/dasmeta/eks-data.token}
+    blocks:
+      exec:
+        api_version: "client.authentication.k8s.io/v1beta1"
+        args: [
+          "eks",
+          "--region", var.region,
+          "get-token", "--cluster-name", local.cluster_name
+        ]
+        command: "aws"
+
+  - name: helm
+    version: "2.10.1"
+    source: "hashicorp/helm"
+    blocks:
+      kubernetes: 
+        cluster_ca_certificate: ${2-product/dasmeta/eks-data.ca_certificate}
+        host: ${2-product/dasmeta/eks-data.host}
+        blocks:
+          exec:
+              api_version: "client.authentication.k8s.io/v1beta1"
+              args: [
+                "eks",
+                "--region", var.region,
+                "get-token", "--cluster-name", local.cluster_name
+              ]
+              command: "aws"
+linked_workspaces:
+    - 2-product/dasmeta/eks-data
+    - 2-product/dasmeta/secret-reader-infra

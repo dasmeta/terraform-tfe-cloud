@@ -1,0 +1,15 @@
+source: dasmeta/eks/aws//modules/eks-data
+version: 2.7.2
+variables:
+  cluster_name: stage-6 
+providers:
+  - name: aws
+    version: ">= 4.0"
+    variables:
+      region: eu-central-1
+      default_tags:
+        tags:
+          Account: dasmeta
+          Environment: stage
+          Product: dasmeta
+          ManageLevel: product

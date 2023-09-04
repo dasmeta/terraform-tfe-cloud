@@ -75,3 +75,49 @@ After another apply is run from local and resulting code is comitted to git repo
 | <a name="output_test-data"></a> [test-data](#output\_test-data) | n/a |
 | <a name="output_workspace_id"></a> [workspace\_id](#output\_workspace\_id) | The ID of created terraform cloud workspace |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
+| <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | ~> 0.40 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | 0.47.0 |
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_aws_credentials_variable_set"></a> [aws\_credentials\_variable\_set](#module\_aws\_credentials\_variable\_set) | ./modules/variable-set | n/a |
+| <a name="module_workspaces"></a> [workspaces](#module\_workspaces) | ./modules/workspace | n/a |
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [tfe_oauth_client.this](https://registry.terraform.io/providers/hashicorp/tfe/latest/docs/resources/oauth_client) | resource |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_aws"></a> [aws](#input\_aws) | Cloud Access (goes to shared variable set, should be adjusted) | `map(any)` | <pre>{<br>  "access_key_id": "",<br>  "default_region": "",<br>  "secret_access_key": ""<br>}</pre> | no |
+| <a name="input_git_org"></a> [git\_org](#input\_git\_org) | The github org/owner name | `string` | n/a | yes |
+| <a name="input_git_provider"></a> [git\_provider](#input\_git\_provider) | The vsc(github, gitlab, ...) provider id | `string` | `"gitlab"` | no |
+| <a name="input_git_repo"></a> [git\_repo](#input\_git\_repo) | The github repo name without org prefix | `string` | n/a | yes |
+| <a name="input_git_token"></a> [git\_token](#input\_git\_token) | The vsc(github, gitlab, ...) personal access token | `string` | n/a | yes |
+| <a name="input_org"></a> [org](#input\_org) | The terraform cloud org name | `string` | n/a | yes |
+| <a name="input_rootdir"></a> [rootdir](#input\_rootdir) | The directory on git repo where the workspaces creator main.tf file located | `string` | `"./_terraform/"` | no |
+| <a name="input_targetdir"></a> [targetdir](#input\_targetdir) | The directory where tf cloud workspace corresponding workspaces will be created | `string` | `"./../_terraform/"` | no |
+| <a name="input_token"></a> [token](#input\_token) | The terraform cloud token | `string` | n/a | yes |
+| <a name="input_yamldir"></a> [yamldir](#input\_yamldir) | The directory where yamls located | `string` | `"."` | no |
+
+## Outputs
+
+No outputs.
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
