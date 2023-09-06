@@ -95,3 +95,9 @@ variable "output" {
   default     = []
   description = "The module output"
 }
+
+variable "auto_apply" {
+  type        = bool
+  default     = false
+  description = "To have workspaces automatically apply after plan is done successfully."
+}

@@ -20,6 +20,7 @@ resource "tfe_workspace" "this" {
   global_remote_state = var.workspace.global_remote_state
   project_id          = local.project_id
   working_directory   = "${var.workspace.directory}${var.name}"
+  auto_apply          = var.auto_apply
 
   dynamic "vcs_repo" {
     for_each = try(var.repo.identifier, null) == null ? [] : [var.repo]
