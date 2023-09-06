@@ -1,5 +1,7 @@
 # for oauth_token_id generation
 resource "tfe_oauth_client" "this" {
+  count = local.create_oauth_client ? 1 : 0
+
   name             = "git-oauth-client"
   organization     = var.org # this one is terraform cloud organisation
   service_provider = local.scm_providers[var.git_provider].provider

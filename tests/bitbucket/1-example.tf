@@ -9,9 +9,9 @@ module "basic" {
 
   rootdir   = "_terraform"
   targetdir = "_terraform"
-  yamldir   = "example-infra"
+  yamldir   = "."
 
-  git_provider = "github"
+  git_provider = "bitbucket"
   git_org      = "dasmeta-testing"
   git_repo     = "test-infrastructure"
   git_token    = var.git_token

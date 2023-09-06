@@ -34,7 +34,7 @@ module "workspaces" {
 
   repo = {
     identifier     = "${var.git_org}/${var.git_repo}"
-    oauth_token_id = tfe_oauth_client.this.oauth_token_id
+    oauth_token_id = local.oauth_token_id
   }
 
   variable_set_ids = concat([module.aws_credentials_variable_set.id], try(each.value.variable_set_ids, []))

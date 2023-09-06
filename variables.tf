@@ -33,21 +33,6 @@ variable "rootdir" {
 }
 
 # SCM
-locals {
-  scm_providers = {
-    github = {
-      http_url = "https://github.com"
-      api_url  = "https://api.github.com"
-      provider = "github"
-    }
-    gitlab = {
-      http_url = "https://gitlab.com"
-      api_url  = "https://gitlab.com/api/v4"
-      provider = "gitlab_hosted"
-    }
-  }
-}
-
 variable "git_provider" {
   type        = string
   default     = "gitlab"
@@ -64,7 +49,7 @@ variable "git_repo" {
 }
 variable "git_token" {
   type        = string
-  description = "The vsc(github, gitlab, ...) personal access token"
+  description = "The vsc(github, gitlab, ...) personal access token. TFC oauth token can be created manually or externally and oken supplied via this variable."
 }
 
 # Cloud Access (goes to shared variable set, should be adjusted)
