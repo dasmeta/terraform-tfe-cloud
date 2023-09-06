@@ -27,6 +27,8 @@ module "workspaces" {
   module_providers  = try(each.value.providers, [])
   linked_workspaces = try(each.value.linked_workspaces, null)
 
+  auto_apply = var.auto_apply
+
   workspace = {
     org       = var.org
     directory = var.rootdir

@@ -18,4 +18,6 @@ module "basic" {
     secret_access_key = ""
     default_region    = ""
   }
+
+  auto_apply = true
 }
