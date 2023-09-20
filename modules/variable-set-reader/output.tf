@@ -1,4 +1,4 @@
 output "values" {
-  value     = data.tfe_variables.this.variables
+  value     = local.results
   sensitive = true
 }
