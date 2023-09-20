@@ -31,7 +31,6 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_name"></a> [name](#input\_name) | Terraform cloud variable set name | `string` | n/a | yes |
 | <a name="input_org"></a> [org](#input\_org) | The terraform cloud organization name where variable set and variables will be created | `string` | n/a | yes |
-| <a name="input_tfc_token"></a> [tfc\_token](#input\_tfc\_token) | Terraform Cloud token so that workspace can load variable set values. | `string` | n/a | yes |
 
 ## Outputs
 
