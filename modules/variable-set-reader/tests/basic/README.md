@@ -24,7 +24,9 @@ No resources.
 
 ## Inputs
 
-No inputs.
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_tfc_token"></a> [tfc\_token](#input\_tfc\_token) | n/a | `any` | n/a | yes |
 
 ## Outputs
 
