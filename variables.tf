@@ -56,12 +56,12 @@ variable "git_token" {
 variable "aws" {
   type = map(any)
   default = {
-    access_key_id      = ""
-    secret_access_key  = ""
-    aws_session_token  = ""
-    aws_security_token = ""
-    default_region     = ""
-    region             = ""
+    access_key_id     = ""
+    secret_access_key = ""
+    session_token     = ""
+    security_token    = ""
+    default_region    = ""
+    region            = ""
   }
   # variable "aws_access_key_id" {
   #   type        = string
