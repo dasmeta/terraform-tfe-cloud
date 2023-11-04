@@ -32,13 +32,13 @@ module "aws_credentials_variable_set" {
     },
     {
       key       = "AWS_SESSION_TOKEN"
-      value     = var.aws.aws_session_token
+      value     = var.aws.session_token
       category  = "env"
       sensitive = true
     },
     {
       key       = "AWS_SECURITY_TOKEN"
-      value     = var.aws.aws_security_token
+      value     = var.aws.security_token
       category  = "env"
       sensitive = true
     },
