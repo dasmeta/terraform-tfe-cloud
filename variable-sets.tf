@@ -23,6 +23,24 @@ module "aws_credentials_variable_set" {
       value     = var.aws.default_region
       category  = "env"
       sensitive = false
-    }
+    },
+    {
+      key       = "AWS_REGION"
+      value     = var.aws.region
+      category  = "env"
+      sensitive = false
+    },
+    {
+      key       = "AWS_SESSION_TOKEN"
+      value     = var.aws.aws_session_token
+      category  = "env"
+      sensitive = true
+    },
+    {
+      key       = "AWS_SECURITY_TOKEN"
+      value     = var.aws.aws_security_token
+      category  = "env"
+      sensitive = true
+    },
   ]
 }
