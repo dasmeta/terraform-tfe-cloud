@@ -107,7 +107,7 @@ After another apply is run from local and resulting code is comitted to git repo
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_auto_apply"></a> [auto\_apply](#input\_auto\_apply) | To have workspaces automatically apply after plan is done successfully. | `bool` | `false` | no |
-| <a name="input_aws"></a> [aws](#input\_aws) | Cloud Access (goes to shared variable set, should be adjusted) | `map(any)` | <pre>{<br>  "access_key_id": "",<br>  "default_region": "",<br>  "region": "",<br>  "secret_access_key": "",<br>  "security_token": "",<br>  "session_token": ""<br>}</pre> | no |
+| <a name="input_aws"></a> [aws](#input\_aws) | Cloud Access (goes to shared variable set, should be adjusted) | `map(any)` | <pre>{<br/>  "access_key_id": "",<br/>  "default_region": "",<br/>  "region": "",<br/>  "secret_access_key": "",<br/>  "security_token": "",<br/>  "session_token": ""<br/>}</pre> | no |
 | <a name="input_git_org"></a> [git\_org](#input\_git\_org) | The github org/owner name | `string` | n/a | yes |
 | <a name="input_git_provider"></a> [git\_provider](#input\_git\_provider) | The vsc(github, gitlab, ...) provider id | `string` | `"gitlab"` | no |
 | <a name="input_git_repo"></a> [git\_repo](#input\_git\_repo) | The github repo name without org prefix | `string` | n/a | yes |

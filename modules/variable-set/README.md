@@ -47,7 +47,7 @@ No modules.
 | <a name="input_global"></a> [global](#input\_global) | Whether the variable set is global(applies on all workspaces in org) or workspace specific | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | Terraform cloud variable set name | `string` | n/a | yes |
 | <a name="input_org"></a> [org](#input\_org) | The terraform cloud organization name where variable set and variables will be created | `string` | n/a | yes |
-| <a name="input_variables"></a> [variables](#input\_variables) | The list of variables/envs | <pre>list(object({<br>    key         = string<br>    value       = string<br>    category    = string # Valid values are terraform or env<br>    description = optional(string, "")<br>    hcl         = optional(bool, false)<br>    sensitive   = optional(bool, false)<br>  }))</pre> | `[]` | no |
+| <a name="input_variables"></a> [variables](#input\_variables) | The list of variables/envs | <pre>list(object({<br/>    key         = string<br/>    value       = string<br/>    category    = string # Valid values are terraform or env<br/>    description = optional(string, "")<br/>    hcl         = optional(bool, false)<br/>    sensitive   = optional(bool, false)<br/>  }))</pre> | `[]` | no |
 | <a name="input_workspace_ids"></a> [workspace\_ids](#input\_workspace\_ids) | The list of workspaces to attach variable set to | `list(string)` | `[]` | no |
 
 ## Outputs

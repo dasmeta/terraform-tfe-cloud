@@ -15,8 +15,8 @@ locals {
       module_nested_provider = local.module_nested_provider == {} ? null : local.module_nested_provider
       variables = { for key, value in var.module_vars : key =>
         jsondecode(format(
-          replace(jsonencode(value), "/(${join("|", keys(local.linked_workspaces_mapping))})/", "%s"),
-          [for key in flatten(regexall("(${join("|", keys(local.linked_workspaces_mapping))})", jsonencode(value))) : try(local.linked_workspaces_mapping[key], "")]...
+          replace(replace(jsonencode(value), "%", "%%"), "/(${join("|", keys(local.linked_workspaces_mapping))})/", "%s"),
+          [for key in flatten(regexall("(${join("|", keys(local.linked_workspaces_mapping))})", replace(jsonencode(value), "%", "%%"))) : try(local.linked_workspaces_mapping[key], "")]...
       )) }
       linked_workspaces = jsonencode(coalesce(var.linked_workspaces, []))
       workspace         = var.workspace
