@@ -1,9 +1,5 @@
 terraform {
   required_providers {
-    test = {
-      source = "terraform.io/builtin/test"
-    }
-
     tfe = {
       version = "~> 0.40"
     }

@@ -4,7 +4,7 @@ module "this" {
   source  = "${source}"
   version = "${version}"
 %{ for key, value in variables }
-  ${key} = ${replace(jsonencode(value), "\\", "")}%{ endfor ~}
+  ${key} = ${replace(replace(replace(replace(replace(jsonencode(value), "\\u003c", "<"), "\\u003e", ">"), "\\u0026", "&"), "this[\\\"", "this[\""), "\\\"]", "\"]")}%{ endfor ~}
 
 %{ if module_nested_provider != null ~}
   providers = ${jsonencode(module_nested_provider)}%{ endif ~}

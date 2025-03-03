@@ -38,7 +38,6 @@ for aws access tokens you will need to have a user having api/cli access to crea
 
 | Name | Version |
 |------|---------|
-| <a name="provider_test"></a> [test](#provider\_test) | n/a |
 | <a name="provider_tfe"></a> [tfe](#provider\_tfe) | ~> 0.40 |
 
 ## Modules
@@ -54,7 +53,6 @@ for aws access tokens you will need to have a user having api/cli access to crea
 
 | Name | Type |
 |------|------|
-| test_assertions.dummy | resource |
 | [tfe_oauth_client.this](https://registry.terraform.io/providers/hashicorp/tfe/latest/docs/resources/oauth_client) | resource |
 
 ## Inputs
