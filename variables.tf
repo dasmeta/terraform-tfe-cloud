@@ -51,6 +51,11 @@ variable "git_token" {
   type        = string
   description = "The vsc(github, gitlab, ...) personal access token. TFC oauth token can be created manually or externally and oken supplied via this variable."
 }
+variable "git_branch" {
+  type        = string
+  default     = null
+  description = "The GitHub branch name; if null, the repo's default branch is used"
+}
 
 # Cloud Access (goes to shared variable set, should be adjusted)
 variable "aws" {
