@@ -4,7 +4,7 @@ variables:
   cluster_name: stage-6
 providers:
   - name: aws
-    version: ">= 4.0"
+    version: "~> 4.0"
     variables:
       region: eu-central-1
       default_tags:

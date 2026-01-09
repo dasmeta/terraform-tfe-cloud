@@ -1,8 +1,9 @@
-# create variable set
 module "aws_credentials_variable_set" {
   source = "./modules/variable-set"
 
-  name = "aws_credentials"
+  # count       = var.aws.enabled ? 1 : 0 # it is supposed that this module can be used with other cloud providers also TODO: uncomment to have this variable set optional to create
+
+  name = var.aws.variable_set_name
   org  = var.org
 
   variables = [
@@ -42,5 +43,24 @@ module "aws_credentials_variable_set" {
       category  = "env"
       sensitive = true
     },
+  ]
+}
+
+module "tfe_token_variable_set" {
+  source = "./modules/variable-set"
+
+  count = var.tfe_token_variable_set.enabled ? 1 : 0
+
+  description = "TFE token for the current organization"
+  global      = false
+  name        = var.tfe_token_variable_set.name
+  org         = var.org
+  variables = [
+    {
+      "category" : "env",
+      "key" : "TFE_TOKEN",
+      "sensitive" : true,
+      "value" : var.token
+    }
   ]
 }

@@ -1,9 +1,11 @@
 locals {
-  name_specials_clean         = replace(var.name, "/[^a-zA-Z0-9_-]+/", "_")
-  project_name_specials_clean = var.workspace.project != null ? replace(var.workspace.project, "/[^a-zA-Z0-9 _-]+/", "") : null
-  linked_workspaces_mapping   = { for workspace in coalesce(var.linked_workspaces, []) : workspace => "data.tfe_outputs.this[\\\"${workspace}\\\"].values.results" }
-  note                        = "This file and its content are generated based on config, pleas check README.md for more details"
-  module_nested_provider      = { for provider in var.module_providers : "${provider.name}${try(provider.alias, "") != "" ? ".${provider.alias}" : ""}" => "${provider.name}${try(provider.alias, "") != "" ? ".${provider.alias}" : ""}" if try(provider.module_nested_provider, false) }
+  name_specials_clean             = replace(var.name, "/[^a-zA-Z0-9_-]+/", "_")
+  project_name_specials_clean     = var.workspace.project != null ? replace(var.workspace.project, "/[^a-zA-Z0-9 _-]+/", "") : null
+  auto_detected_linked_workspaces = [for item in flatten([for content in concat([for var_value in var.module_vars : var_value], var.module_providers) : regexall("\\$${([^}]+)}", jsonencode(content))]) : replace(item, "/\\..+/", "")]
+  linked_workspaces               = distinct(concat(coalesce(var.linked_workspaces, []), local.auto_detected_linked_workspaces))
+  linked_workspaces_mapping       = { for workspace in local.linked_workspaces : workspace => "data.tfe_outputs.this[\\\"${workspace}\\\"].values.results" }
+  note                            = "This file and its content are generated based on config, pleas check README.md for more details"
+  module_nested_provider          = { for provider in var.module_providers : "${provider.name}${try(provider.alias, "") != "" ? ".${provider.alias}" : ""}" => "${provider.name}${try(provider.alias, "") != "" ? ".${provider.alias}" : ""}" if try(provider.module_nested_provider, false) }
 
   # main.tf file content
   main_content = templatefile(
@@ -18,7 +20,7 @@ locals {
           replace(replace(jsonencode(value), "%", "%%"), "/(${join("|", keys(local.linked_workspaces_mapping))})/", "%s"),
           [for key in flatten(regexall("(${join("|", keys(local.linked_workspaces_mapping))})", replace(jsonencode(value), "%", "%%"))) : try(local.linked_workspaces_mapping[key], "")]...
       )) }
-      linked_workspaces = jsonencode(coalesce(var.linked_workspaces, []))
+      linked_workspaces = jsonencode(local.linked_workspaces)
       workspace         = var.workspace
     }
   )

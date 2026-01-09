@@ -19,24 +19,31 @@ resource "tfe_workspace" "this" {
   tag_names           = var.workspace.tags
   global_remote_state = var.workspace.global_remote_state
   project_id          = local.project_id
-  working_directory   = "${var.workspace.directory}${var.name}"
+  working_directory   = "${trimsuffix(var.workspace.directory, "/")}/${var.name}"
   auto_apply          = var.auto_apply
 
   dynamic "vcs_repo" {
-    for_each = try(var.repo.identifier, null) == null ? [] : [var.repo]
+    for_each = var.repo.enabled && try(var.repo.identifier, null) != null ? [var.repo] : []
 
     content {
       identifier         = var.repo.identifier
       branch             = try(var.repo.branch, null)
       ingress_submodules = try(var.repo.ingress_submodules, null)
-      oauth_token_id     = try(var.repo.oauth_token_id, null)
+      oauth_token_id     = nonsensitive(try(var.repo.oauth_token_id, null))
       tags_regex         = try(var.repo.tags_regex, null)
     }
   }
 }
 
+data "tfe_variable_set" "this" {
+  for_each = toset(var.variable_sets)
+
+  name         = each.value
+  organization = var.workspace.org
+}
+
 resource "tfe_workspace_variable_set" "this" {
-  for_each = { for key, variable_set_id in coalesce(var.variable_set_ids, []) : key => variable_set_id }
+  for_each = { for key, variable_set_id in concat(var.variable_set_ids, [for item in data.tfe_variable_set.this : item.id]) : key => variable_set_id }
 
   workspace_id    = tfe_workspace.this.id
   variable_set_id = each.value

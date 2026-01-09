@@ -3,6 +3,7 @@ resource "tfe_variable_set" "this" {
   description  = var.description
   global       = var.global
   organization = var.org
+  priority     = var.priority
 }
 
 resource "tfe_variable" "this" {

@@ -1,0 +1,5 @@
+source: dasmeta/null/empty
+version: 1.2.1
+variables:
+  first-string: *my_shared_config_string
+  fifth-object: *my_shared_config_object

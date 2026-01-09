@@ -26,7 +26,7 @@ variables:
   architecture: "replicaset"
 providers:
   - name: aws
-    version: ">= 4.0"
+    version: "~> 4.0"
     custom_vars:
       region: eu-central-1
       default_tags:
@@ -45,11 +45,15 @@ providers:
     blocks:
       exec:
         api_version: "client.authentication.k8s.io/v1beta1"
-        args: [
-          "eks",
-          "--region", var.region,
-          "get-token", "--cluster-name", local.cluster_name
-        ]
+        args:
+          [
+            "eks",
+            "--region",
+            var.region,
+            "get-token",
+            "--cluster-name",
+            local.cluster_name,
+          ]
         command: "aws"
   - name: helm
     version: "2.10.1"
@@ -61,11 +65,15 @@ providers:
         blocks:
           exec:
             api_version: "client.authentication.k8s.io/v1beta1"
-            args: [
-              "eks",
-              "--region", var.region,
-              "get-token", "--cluster-name", local.cluster_name
-            ]
+            args:
+              [
+                "eks",
+                "--region",
+                var.region,
+                "get-token",
+                "--cluster-name",
+                local.cluster_name,
+              ]
             command: "aws"
 linked_workspaces:
   - 2-product/dasmeta/eks-data

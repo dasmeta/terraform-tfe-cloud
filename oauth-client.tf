@@ -2,7 +2,7 @@
 resource "tfe_oauth_client" "this" {
   count = local.create_oauth_client ? 1 : 0
 
-  name             = "git-oauth-client"
+  name             = var.git_oauth_client_name
   organization     = var.org # this one is terraform cloud organisation
   service_provider = local.scm_providers[var.git_provider].provider
   http_url         = local.scm_providers[var.git_provider].http_url

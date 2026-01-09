@@ -18,7 +18,7 @@ module "this" {
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3 |
 | <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | ~> 0.40 |
 
 ## Providers
@@ -47,7 +47,8 @@ No modules.
 | <a name="input_global"></a> [global](#input\_global) | Whether the variable set is global(applies on all workspaces in org) or workspace specific | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | Terraform cloud variable set name | `string` | n/a | yes |
 | <a name="input_org"></a> [org](#input\_org) | The terraform cloud organization name where variable set and variables will be created | `string` | n/a | yes |
-| <a name="input_variables"></a> [variables](#input\_variables) | The list of variables/envs | <pre>list(object({<br>    key         = string<br>    value       = string<br>    category    = string # Valid values are terraform or env<br>    description = optional(string, "")<br>    hcl         = optional(bool, false)<br>    sensitive   = optional(bool, false)<br>  }))</pre> | `[]` | no |
+| <a name="input_priority"></a> [priority](#input\_priority) | Whether the variables in this set can be over-written by more specific scopes including values set on the command line | `bool` | `false` | no |
+| <a name="input_variables"></a> [variables](#input\_variables) | The list of variables/envs | <pre>list(object({<br/>    key         = string<br/>    value       = string<br/>    category    = string # Valid values are terraform or env<br/>    description = optional(string, "")<br/>    hcl         = optional(bool, false)<br/>    sensitive   = optional(bool, false)<br/>  }))</pre> | `[]` | no |
 | <a name="input_workspace_ids"></a> [workspace\_ids](#input\_workspace\_ids) | The list of workspaces to attach variable set to | `list(string)` | `[]` | no |
 
 ## Outputs
@@ -55,4 +56,5 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_id"></a> [id](#output\_id) | n/a |
+| <a name="output_name"></a> [name](#output\_name) | n/a |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
