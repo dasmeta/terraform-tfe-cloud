@@ -3,7 +3,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",
     "@commitlint/config-conventional": "^17.0.3",
-    "husky": "^8.0.1",
+    "husky": "^9.1.7",
     "@semantic-release/github": "^8.0.4",
     "semantic-release": "^19.0.3"
   },
