@@ -4,20 +4,15 @@ on:
   push:
     branches: [main, master]
 jobs:
-  terraform-validate:
+  checkov-check:
     runs-on: ubuntu-latest
+    permissions: {}
     strategy:
       matrix:
         path:
-          - variable-set
-    permissions:
-      actions: write
-      contents: write
-      discussions: write
-      pull-requests: write
+          - ./
     steps:
-    - uses: dasmeta/reusable-actions-workflows/checkov@main
-      with:
-        fetch-depth: 0
-        directory: modules/${{ matrix.path }}
-      continue-on-error: true
+      - uses: dasmeta/reusable-actions-workflows/checkov@4.2.0
+        with:
+          directory: ${{ matrix.path }}
+        continue-on-error: true

@@ -20,6 +20,12 @@ variable "global" {
   description = "Whether the variable set is global(applies on all workspaces in org) or workspace specific"
 }
 
+variable "priority" {
+  type        = bool
+  default     = false
+  description = "Whether the variables in this set can be over-written by more specific scopes including values set on the command line"
+}
+
 variable "variables" {
   type = list(object({
     key         = string

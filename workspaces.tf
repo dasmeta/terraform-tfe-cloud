@@ -1,16 +1,3 @@
-locals {
-  yaml_files_raw = {
-    for file in fileset(
-      var.yamldir,
-      "**/*.yaml"
-    ) : replace(file, "/.yaml$/", "") => try(yamldecode(file("${var.yamldir}/${file}")), {})
-    if length(regexall("\\.terraform", file)) <= 0 # exclude files coming from .terraform folder
-  }
-
-  yaml_files = { for key, item in local.yaml_files_raw : key => item
-  if try(item.source, null) != null && try(item.version, null) != null }
-}
-
 module "workspaces" {
   source = "./modules/workspace"
 
@@ -25,7 +12,7 @@ module "workspaces" {
   target_dir     = var.targetdir
 
   module_providers  = try(each.value.providers, [])
-  linked_workspaces = try(each.value.linked_workspaces, null)
+  linked_workspaces = try(each.value.linked_workspaces, [])
 
   auto_apply = var.auto_apply
 
@@ -35,10 +22,12 @@ module "workspaces" {
   }
 
   repo = {
+    enabled        = var.git_enabled
     identifier     = "${var.git_org}/${var.git_repo}"
     oauth_token_id = local.oauth_token_id
     branch         = var.git_branch
   }
 
+  variable_sets    = try(each.value.variable_sets, [])
   variable_set_ids = concat([module.aws_credentials_variable_set.id], try(each.value.variable_set_ids, []))
 }

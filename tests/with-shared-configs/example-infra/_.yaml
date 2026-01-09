@@ -1,0 +1,5 @@
+my_shared_config_string: &my_shared_config_string "some-test-string-value"
+my_shared_config_object: &my_shared_config_object
+  key1: value1
+  key2: value2
+  key3: value4
