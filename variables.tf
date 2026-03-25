@@ -74,14 +74,14 @@ variable "git_oauth_client_name" {
 # Cloud Access (goes to shared variable set, should be adjusted)
 variable "aws" {
   type = object({
-    # enabled           = optional(bool, true) # TODO: uncomment to make this variable set optional to create
-    variable_set_name = optional(string, "aws_credentials")
-    access_key_id     = optional(string, "")
-    secret_access_key = optional(string, "")
-    session_token     = optional(string, "")
-    security_token    = optional(string, "")
-    default_region    = optional(string, "")
-    region            = optional(string, "")
+    enabled           = optional(bool, true)                # Controls AWS credentials variable set creation
+    variable_set_name = optional(string, "aws_credentials") # Target AWS variable set name
+    access_key_id     = optional(string, "")                # AWS access key ID value
+    secret_access_key = optional(string, "")                # AWS secret access key value
+    session_token     = optional(string, "")                # AWS session token value
+    security_token    = optional(string, "")                # AWS security token value
+    default_region    = optional(string, "")                # AWS default region value
+    region            = optional(string, "")                # AWS region value
   })
   default     = {}
   description = "The aws env variables set used as default in all workspaces"

@@ -2,7 +2,8 @@ terraform {
   cloud {
     organization = "dasmeta-testing"
     workspaces {
-      name = "terraform-tfe-cloud-test"
+      tags = ["terraform-tfe-cloud-test", "dev"]
+      # name = "terraform-tfe-cloud-test"
     }
   }
 }

@@ -1,6 +1,7 @@
 locals {
   name_specials_clean             = replace(var.name, "/[^a-zA-Z0-9_-]+/", "_")
   project_name_specials_clean     = var.workspace.project != null ? replace(var.workspace.project, "/[^a-zA-Z0-9 _-]+/", "") : null
+  effective_execution_mode        = var.workspace.agent_pool_name == null ? null : "agent"
   auto_detected_linked_workspaces = [for item in flatten([for content in concat([for var_value in var.module_vars : var_value], var.module_providers) : regexall("\\$${([^}]+)}", jsonencode(content))]) : replace(item, "/\\..+/", "")]
   linked_workspaces               = distinct(concat(coalesce(var.linked_workspaces, []), local.auto_detected_linked_workspaces))
   linked_workspaces_mapping       = { for workspace in local.linked_workspaces : workspace => "data.tfe_outputs.this[\\\"${workspace}\\\"].values.results" }
@@ -50,6 +51,8 @@ locals {
     }
   )
 
+  provider_custom_vars_default_merged = { for provider in var.module_providers : "${provider.name}${try(provider.alias, null) == null ? "" : "-${provider.alias}"}" => provider::deepmerge::mergo(try(provider.variables, {}), try(local.provider_custom_var_blocks[provider.name], {})) }
+
   # providers.tf file content
   providers_content = templatefile(
     "${path.module}/templates/providers.tf.tftpl",
@@ -69,7 +72,7 @@ locals {
             [for key in flatten(regexall("(${join("|", keys(local.linked_workspaces_mapping))})", jsonencode(value))) : try(local.linked_workspaces_mapping[key], "")]...
           )) if !try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false)
         }
-        custom_var_blocks = { for key, value in try(module.provider_custom_vars_default_merged["${provider.name}${try(provider.alias, null) == null ? "" : "-${provider.alias}"}"].merged) : key => value if try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false) }
+        custom_var_blocks = { for key, value in try(local.provider_custom_vars_default_merged["${provider.name}${try(provider.alias, null) == null ? "" : "-${provider.alias}"}"], {}) : key => value if try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false) }
       })]
     }
   )
@@ -131,28 +134,4 @@ locals {
   }
 
   project_id = try(tfe_project.project[0].id, var.workspace.project_id)
-}
-
-module "provider_custom_vars_default_merged" {
-  source  = "cloudposse/config/yaml//modules/deepmerge"
-  version = "1.0.2"
-
-  for_each = { for provider in var.module_providers : "${provider.name}${try(provider.alias, null) == null ? "" : "-${provider.alias}"}" => provider }
-
-  maps = [
-    try(each.value.variables, {}),
-    try(local.provider_custom_var_blocks[each.value.name], {})
-  ]
-}
-
-
-output "test-data" {
-  value = [for provider in var.module_providers : merge(provider, {
-    blocks = { for key, value in try(provider.blocks, {}) : key =>
-      format(
-        replace(jsonencode(value), "/(${join("|", keys(local.linked_workspaces_mapping))})/", "%s"),
-        [for key in flatten(regexall("(${join("|", keys(local.linked_workspaces_mapping))})", jsonencode(value))) : try(local.linked_workspaces_mapping[key], "")]...
-      ) if !try(contains(keys(local.provider_custom_var_blocks[provider.name]), key), false)
-    }
-  })]
 }

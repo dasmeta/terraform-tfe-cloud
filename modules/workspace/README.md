@@ -21,26 +21,46 @@ to enable pre commit hooks run:
 ```sh
 git config core.hooksPath githooks
 ```
+
+### Agent pool assignment
+
+You can assign a managed workspace to a Terraform Cloud agent pool by passing
+`workspace.agent_pool_name`. The module resolves the pool by name in the
+workspace organization and applies affinity in `tfe_workspace_settings`.
+
+### Workspace settings migration notes
+
+- Deprecated direct workspace execution/affinity controls are no longer relied on.
+- Effective execution behavior is managed through `tfe_workspace_settings`.
+- If `workspace.agent_pool_name` is set, execution mode is forced to `agent`.
+- If execution mode is omitted and no agent pool is set, execution mode is left `null` (unset).
+
+In root/module wiring, a common pattern is:
+- group-level default: `agent_pool = { name = "...", enabled = true }`
+- workspace-level override: `workspace.agent_pool_name = "..."`
+
+If `workspace.agent_pool_name` is set but empty, validation fails fast.
+If a non-empty name does not exist in the organization, apply fails during
+agent-pool lookup.
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3 |
-| <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | ~> 0.40 |
+| <a name="requirement_deepmerge"></a> [deepmerge](#requirement\_deepmerge) | ~> 1.1 |
+| <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | ~> 0.74 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_local"></a> [local](#provider\_local) | n/a |
-| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | ~> 0.40 |
+| <a name="provider_local"></a> [local](#provider\_local) | 2.7.0 |
+| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | 0.74.1 |
 
 ## Modules
 
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_provider_custom_vars_default_merged"></a> [provider\_custom\_vars\_default\_merged](#module\_provider\_custom\_vars\_default\_merged) | cloudposse/config/yaml//modules/deepmerge | 1.0.2 |
+No modules.
 
 ## Resources
 
@@ -49,7 +69,9 @@ git config core.hooksPath githooks
 | [local_file.this](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
 | [tfe_project.project](https://registry.terraform.io/providers/hashicorp/tfe/latest/docs/resources/project) | resource |
 | [tfe_workspace.this](https://registry.terraform.io/providers/hashicorp/tfe/latest/docs/resources/workspace) | resource |
+| [tfe_workspace_settings.this](https://registry.terraform.io/providers/hashicorp/tfe/latest/docs/resources/workspace_settings) | resource |
 | [tfe_workspace_variable_set.this](https://registry.terraform.io/providers/hashicorp/tfe/latest/docs/resources/workspace_variable_set) | resource |
+| [tfe_agent_pool.this](https://registry.terraform.io/providers/hashicorp/tfe/latest/docs/data-sources/agent_pool) | data source |
 | [tfe_variable_set.this](https://registry.terraform.io/providers/hashicorp/tfe/latest/docs/data-sources/variable_set) | data source |
 
 ## Inputs
@@ -70,13 +92,12 @@ git config core.hooksPath githooks
 | <a name="input_terraform_version"></a> [terraform\_version](#input\_terraform\_version) | The required\_version variable value for terraform{} block in versions.tf | `string` | `">= 1.3.0"` | no |
 | <a name="input_variable_set_ids"></a> [variable\_set\_ids](#input\_variable\_set\_ids) | The list of variable set ids to attach to workspace TODO: for backward compatibility we keep both variable\_set\_ids and variable\_sets, but variable\_sets is the preferred way to attach variable sets to workspace, it is supposed variable\_set\_ids will be removed | `list(string)` | `[]` | no |
 | <a name="input_variable_sets"></a> [variable\_sets](#input\_variable\_sets) | The list of variable set names to attach to workspace. TODO: for backward compatibility we keep both variable\_set\_ids and variable\_sets, but variable\_sets is the preferred way to attach variable sets to workspace, it is supposed variable\_set\_ids will be removed | `list(string)` | `[]` | no |
-| <a name="input_workspace"></a> [workspace](#input\_workspace) | Terraform cloud workspace configurations | <pre>object({<br/>    org                 = string<br/>    tags                = optional(list(string), null)<br/>    description         = optional(string, null)<br/>    directory           = optional(string, "./") # this seems supposed to be the root directory of git repo<br/>    global_remote_state = optional(bool, true)   # allow org workspaces access to this workspace state, TODO: there is a way to implement specific workspaces whitelisting using remote_state_consumer_ids, needs apply and testing<br/>    project             = optional(string, null) # name of the project to be created and where the workspace should be created<br/>    project_id          = optional(string, null) # ID of the project which already exists, if none of project and project_id is provided Default Project is used for storing workspaces<br/>  })</pre> | n/a | yes |
+| <a name="input_workspace"></a> [workspace](#input\_workspace) | Terraform cloud workspace configurations | <pre>object({<br/>    org                 = string<br/>    tags                = optional(list(string), null)<br/>    description         = optional(string, null)<br/>    directory           = optional(string, "./") # this seems supposed to be the root directory of git repo<br/>    global_remote_state = optional(bool, true)   # allow org workspaces access to this workspace state, TODO: there is a way to implement specific workspaces whitelisting using remote_state_consumer_ids, needs apply and testing<br/>    project             = optional(string, null) # name of the project to be created and where the workspace should be created<br/>    project_id          = optional(string, null) # ID of the project which already exists, if none of project and project_id is provided Default Project is used for storing workspaces<br/>    agent_pool_name     = optional(string, null) # name of the agent pool to be used for the workspace<br/>    execution_mode      = optional(string, null) # requested execution mode for workspace settings (agent/remote), null means module default handling<br/>  })</pre> | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
 | <a name="output_project_id"></a> [project\_id](#output\_project\_id) | The ID of terraform cloud project |
-| <a name="output_test-data"></a> [test-data](#output\_test-data) | n/a |
 | <a name="output_workspace_id"></a> [workspace\_id](#output\_workspace\_id) | The ID of created terraform cloud workspace |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

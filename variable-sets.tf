@@ -1,7 +1,7 @@
 module "aws_credentials_variable_set" {
   source = "./modules/variable-set"
 
-  # count       = var.aws.enabled ? 1 : 0 # it is supposed that this module can be used with other cloud providers also TODO: uncomment to have this variable set optional to create
+  count = var.aws.enabled ? 1 : 0
 
   name = var.aws.variable_set_name
   org  = var.org

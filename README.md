@@ -21,6 +21,55 @@ After another apply is run from local and resulting code is committed to git rep
 4. Terraform apply will create workspaces and code (by default in _terraform folder).
 5. Commit/Push the code and TFC will pick up and apply changes as requested.
 
+## basic example
+```hcl
+module "cloud" {
+  source  = "dasmeta/cloud/tfe"
+  # version = "x.y.z" # check and set the version from terraform registry
+
+  org   = "my-tf-cloud-org"
+  token = "my-tf-cloud-token"
+}
+
+```
+
+### Agent pool defaults and overrides
+
+Workspace agent pool can be configured by name:
+- per-workspace override: `workspace.agent_pool_name`
+- group/shared default in YAML: `agent_pool: { name: <pool-name>, enabled: true }`
+
+Precedence is workspace override first, then enabled group default, otherwise unset.
+
+### Workspace settings precedence and defaults
+
+- Workspace execution/affinity behavior is managed via workspace settings resources.
+- If `workspace.agent_pool_name` is set, execution mode is treated as `agent`.
+- If no explicit execution mode is provided and no agent pool is set, execution mode is left `null` (unset).
+- Workspace-level settings take precedence over organization default settings.
+
+### AWS variable set toggle
+
+- `aws.enabled` controls whether the default AWS credentials variable set is created.
+- Default behavior is preserved: if `aws.enabled` is omitted, it is treated as `true`.
+- Set `aws.enabled = false` to skip creating the AWS credentials variable set.
+- State migration for historical setups is handled via root `moved.tf` (`module.aws_credentials_variable_set` -> `module.aws_credentials_variable_set[0]`).
+
+Default-enabled (legacy-compatible) example:
+```hcl
+aws = {
+  variable_set_name = "aws_credentials"
+  # enabled omitted -> true
+}
+```
+
+Disabled example:
+```hcl
+aws = {
+  enabled = false
+}
+```
+
 ## ToDo
 1. Modify module to not create workspace immediately but only when code is committed (this might create issue with race condition, workspaces can be created but TFC might have had already tried to execute code).
 2. There is an issue with some providers (more details in jira).
@@ -47,13 +96,13 @@ git config --global core.hooksPath ./githooks
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3 |
 | <a name="requirement_deepmerge"></a> [deepmerge](#requirement\_deepmerge) | ~> 1.1 |
-| <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | ~> 0.40 |
+| <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | ~> 0.74 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | ~> 0.40 |
+| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | 0.74.1 |
 
 ## Modules
 
@@ -74,7 +123,7 @@ git config --global core.hooksPath ./githooks
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_auto_apply"></a> [auto\_apply](#input\_auto\_apply) | To have workspaces automatically apply after plan is done successfully. | `bool` | `false` | no |
-| <a name="input_aws"></a> [aws](#input\_aws) | The aws env variables set used as default in all workspaces | <pre>object({<br/>    # enabled           = optional(bool, true) # TODO: uncomment to make this variable set optional to create<br/>    variable_set_name = optional(string, "aws_credentials")<br/>    access_key_id     = optional(string, "")<br/>    secret_access_key = optional(string, "")<br/>    session_token     = optional(string, "")<br/>    security_token    = optional(string, "")<br/>    default_region    = optional(string, "")<br/>    region            = optional(string, "")<br/>  })</pre> | `{}` | no |
+| <a name="input_aws"></a> [aws](#input\_aws) | The aws env variables set used as default in all workspaces | <pre>object({<br/>    enabled           = optional(bool, true)                # Controls AWS credentials variable set creation<br/>    variable_set_name = optional(string, "aws_credentials") # Target AWS variable set name<br/>    access_key_id     = optional(string, "")                # AWS access key ID value<br/>    secret_access_key = optional(string, "")                # AWS secret access key value<br/>    session_token     = optional(string, "")                # AWS session token value<br/>    security_token    = optional(string, "")                # AWS security token value<br/>    default_region    = optional(string, "")                # AWS default region value<br/>    region            = optional(string, "")                # AWS region value<br/>  })</pre> | `{}` | no |
 | <a name="input_git_branch"></a> [git\_branch](#input\_git\_branch) | The GitHub branch name; if null, the repo's default branch is used | `string` | `null` | no |
 | <a name="input_git_enabled"></a> [git\_enabled](#input\_git\_enabled) | Whether to create tfe oauth connection with git repo | `bool` | `true` | no |
 | <a name="input_git_oauth_client_name"></a> [git\_oauth\_client\_name](#input\_git\_oauth\_client\_name) | The name of tfe oauth connection with git repo | `string` | `"git-oauth-client"` | no |
