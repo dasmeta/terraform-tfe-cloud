@@ -1,2 +1,5 @@
-source: dasmeta/null/empty
-version: 1.0.1
+source: dasmeta/empty/null
+version: 1.2.2
+workspace:
+  execution_mode: agent
+  agent_pool_name: basic-runner-pool

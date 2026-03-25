@@ -24,3 +24,14 @@ module "basic" {
 
   auto_apply = true
 }
+
+# Verification notes:
+# 1) Baseline: capture existing workspace execution behavior.
+# 2) Apply with `tests/basic/example-infra/empty.yaml`:
+#    - `tfe_workspace_settings` should manage execution behavior.
+#    - `agent_pool_id` should be assigned via workspace settings (not deprecated direct workspace fields).
+# 3) Change only `workspace.agent_pool_name` and re-apply:
+#    only affinity should change (no duplicate workspace).
+# 4) Re-run apply with no further changes: plan should be empty (idempotent).
+# 5) `aws.enabled` is omitted in this scenario, so default behavior keeps AWS variable set creation enabled.
+# 6) After introducing count-based AWS module instantiation, root `moved.tf` should prevent AWS variable set recreation.

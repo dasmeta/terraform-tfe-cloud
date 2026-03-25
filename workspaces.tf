@@ -17,8 +17,9 @@ module "workspaces" {
   auto_apply = var.auto_apply
 
   workspace = {
-    org       = var.org
-    directory = var.rootdir
+    org             = var.org
+    directory       = var.rootdir
+    agent_pool_name = try(each.value.agent_pool_name, null)
   }
 
   repo = {
@@ -29,5 +30,5 @@ module "workspaces" {
   }
 
   variable_sets    = try(each.value.variable_sets, [])
-  variable_set_ids = concat([module.aws_credentials_variable_set.id], try(each.value.variable_set_ids, []))
+  variable_set_ids = concat(module.aws_credentials_variable_set[*].id, try(each.value.variable_set_ids, []))
 }

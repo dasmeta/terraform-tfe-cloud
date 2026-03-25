@@ -22,6 +22,8 @@ variable "workspace" {
     global_remote_state = optional(bool, true)   # allow org workspaces access to this workspace state, TODO: there is a way to implement specific workspaces whitelisting using remote_state_consumer_ids, needs apply and testing
     project             = optional(string, null) # name of the project to be created and where the workspace should be created
     project_id          = optional(string, null) # ID of the project which already exists, if none of project and project_id is provided Default Project is used for storing workspaces
+    agent_pool_name     = optional(string, null) # name of the agent pool to be used for the workspace
+    execution_mode      = optional(string, null) # requested execution mode for workspace settings (agent/remote), null means module default handling
   })
   description = "Terraform cloud workspace configurations"
 }

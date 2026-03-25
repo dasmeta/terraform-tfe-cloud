@@ -12,15 +12,19 @@ resource "tfe_project" "project" {
   name         = local.project_name_specials_clean
 }
 
+data "tfe_agent_pool" "this" {
+  count = (try(var.workspace.agent_pool_name, null) == null ? null : trimspace(var.workspace.agent_pool_name)) == null ? 0 : 1
+
+  name         = trimspace(var.workspace.agent_pool_name)
+  organization = var.workspace.org
+}
+
 resource "tfe_workspace" "this" {
-  name                = local.name_specials_clean
-  description         = var.workspace.description
-  organization        = var.workspace.org
-  tag_names           = var.workspace.tags
-  global_remote_state = var.workspace.global_remote_state
-  project_id          = local.project_id
-  working_directory   = "${trimsuffix(var.workspace.directory, "/")}/${var.name}"
-  auto_apply          = var.auto_apply
+  name              = local.name_specials_clean
+  organization      = var.workspace.org
+  tag_names         = var.workspace.tags
+  project_id        = local.project_id
+  working_directory = "${trimsuffix(var.workspace.directory, "/")}/${var.name}"
 
   dynamic "vcs_repo" {
     for_each = var.repo.enabled && try(var.repo.identifier, null) != null ? [var.repo] : []
@@ -29,10 +33,19 @@ resource "tfe_workspace" "this" {
       identifier         = var.repo.identifier
       branch             = try(var.repo.branch, null)
       ingress_submodules = try(var.repo.ingress_submodules, null)
-      oauth_token_id     = nonsensitive(try(var.repo.oauth_token_id, null))
+      oauth_token_id     = try(nonsensitive(var.repo.oauth_token_id), var.repo.oauth_token_id)
       tags_regex         = try(var.repo.tags_regex, null)
     }
   }
+}
+
+resource "tfe_workspace_settings" "this" {
+  workspace_id        = tfe_workspace.this.id
+  execution_mode      = local.effective_execution_mode
+  agent_pool_id       = try(data.tfe_agent_pool.this[0].id, null)
+  global_remote_state = var.workspace.global_remote_state
+  auto_apply          = var.auto_apply
+  description         = var.workspace.description
 }
 
 data "tfe_variable_set" "this" {
