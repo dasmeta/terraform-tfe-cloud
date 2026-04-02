@@ -19,7 +19,7 @@ variable "helm" {
   description = "Helm configuration for agent deployment (chart/image/pod resources + Helm install settings)."
   type = object({
     namespace        = optional(string, "meta-system")
-    create_namespace = optional(bool, true)
+    create_namespace = optional(bool, false)
     atomic           = optional(bool, true)
     wait             = optional(bool, true)
 
@@ -43,8 +43,8 @@ variable "helm" {
       }), {})
 
       limits = optional(object({
-        cpu    = optional(string, "500m")
-        memory = optional(string, "512Mi")
+        cpu    = optional(string, "1000m")
+        memory = optional(string, "1Gi")
       }), {})
     }), {})
   })
