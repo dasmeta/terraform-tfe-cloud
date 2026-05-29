@@ -5,9 +5,5 @@ terraform {
     tfe = {
       version = "~> 0.74"
     }
-    deepmerge = {
-      source  = "isometry/deepmerge"
-      version = "~> 1.1"
-    }
   }
 }

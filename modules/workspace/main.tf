@@ -1,8 +1,27 @@
-resource "local_file" "this" {
-  for_each = { for file in local.files_to_generate : file.name => file }
+module "renderer" {
+  source  = "dasmeta/generic/renderer"
+  version = "1.0.0"
 
-  content  = each.value.content
-  filename = "${trimsuffix(var.target_dir, "/")}/${var.name}/${each.value.name}"
+  name       = var.name
+  setup_path = var.name
+  module_config = {
+    source    = var.module_source
+    version   = var.module_version
+    variables = var.module_vars
+    providers = var.module_providers
+  }
+  target_dir = var.target_dir
+  terraform = {
+    version = var.terraform_version
+    backend = var.terraform_backend
+    cloud   = { organization = var.workspace.org }
+  }
+  provider_default_tags       = local.renderer_provider_default_tags
+  linked_setups               = { for workspace in local.linked_workspaces : workspace => {} }
+  linked_setup_result_mapping = local.linked_workspaces_mapping
+  main_tf_extra_content       = local.renderer_main_tf_extra_content
+  output                      = var.output
+  generated_by_module         = "dasmeta/terraform-tfe-cloud"
 }
 
 resource "tfe_project" "project" {

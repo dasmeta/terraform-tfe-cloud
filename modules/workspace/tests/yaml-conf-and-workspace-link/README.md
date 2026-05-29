@@ -38,13 +38,13 @@ for aws access tokens you will need to have a user having api/cli access to crea
 
 | Name | Version |
 |------|---------|
-| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | ~> 0.40 |
+| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | 0.77.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_aws_credentials_variable_set"></a> [aws\_credentials\_variable\_set](#module\_aws\_credentials\_variable\_set) | ../../modules/variable-set | n/a |
+| <a name="module_aws_credentials_variable_set"></a> [aws\_credentials\_variable\_set](#module\_aws\_credentials\_variable\_set) | ../../../variable-set | n/a |
 | <a name="module_aws_user"></a> [aws\_user](#module\_aws\_user) | dasmeta/modules/aws//modules/aws-iam-user | 1.5.2 |
 | <a name="module_github_repository"></a> [github\_repository](#module\_github\_repository) | dasmeta/repository/github | 0.7.2 |
 | <a name="module_this"></a> [this](#module\_this) | ../../ | n/a |
