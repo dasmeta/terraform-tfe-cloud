@@ -48,25 +48,24 @@ agent-pool lookup.
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3 |
-| <a name="requirement_deepmerge"></a> [deepmerge](#requirement\_deepmerge) | ~> 1.1 |
 | <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | ~> 0.74 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_local"></a> [local](#provider\_local) | 2.7.0 |
-| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | 0.74.1 |
+| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | ~> 0.74 |
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_renderer"></a> [renderer](#module\_renderer) | dasmeta/generic/renderer | 1.0.4 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
-| [local_file.this](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
 | [tfe_project.project](https://registry.terraform.io/providers/hashicorp/tfe/latest/docs/resources/project) | resource |
 | [tfe_workspace.this](https://registry.terraform.io/providers/hashicorp/tfe/latest/docs/resources/workspace) | resource |
 | [tfe_workspace_settings.this](https://registry.terraform.io/providers/hashicorp/tfe/latest/docs/resources/workspace_settings) | resource |

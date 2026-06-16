@@ -95,7 +95,7 @@ module "aws_user" {
 
 # create variable set
 module "aws_credentials_variable_set" {
-  source = "../../modules/variable-set"
+  source = "../../../variable-set"
 
   name = "test_aws_credentials"
   org  = local.terraform_cloud_org

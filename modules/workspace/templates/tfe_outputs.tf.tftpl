@@ -1,0 +1,6 @@
+data "tfe_outputs" "this" {
+  for_each = { for workspace in __LINKED_SETUPS_JSON__ : workspace => workspace }
+
+  organization = "__LINKED_SETUP_QUERY_ORGANIZATION__"
+  workspace    = replace(each.value, "/[^a-zA-Z0-9_-]+/", "_")
+}

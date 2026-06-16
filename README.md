@@ -102,7 +102,7 @@ git config --global core.hooksPath ./githooks
 
 | Name | Version |
 |------|---------|
-| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | 0.74.1 |
+| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | ~> 0.74 |
 
 ## Modules
 
