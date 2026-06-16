@@ -38,7 +38,7 @@ for aws access tokens you will need to have a user having api/cli access to crea
 
 | Name | Version |
 |------|---------|
-| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | 0.77.0 |
+| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | 0.78.0 |
 
 ## Modules
 

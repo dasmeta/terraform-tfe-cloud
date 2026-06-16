@@ -54,13 +54,13 @@ agent-pool lookup.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | 0.74.1 |
+| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | ~> 0.74 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_renderer"></a> [renderer](#module\_renderer) | dasmeta/generic/renderer | 1.0.0 |
+| <a name="module_renderer"></a> [renderer](#module\_renderer) | dasmeta/generic/renderer | 1.0.4 |
 
 ## Resources
 

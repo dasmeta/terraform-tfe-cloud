@@ -1,6 +1,6 @@
 module "renderer" {
   source  = "dasmeta/generic/renderer"
-  version = "1.0.0"
+  version = "1.0.4"
 
   name       = var.name
   setup_path = var.name
@@ -9,6 +9,7 @@ module "renderer" {
     version   = var.module_version
     variables = var.module_vars
     providers = var.module_providers
+    output    = var.output
   }
   target_dir = var.target_dir
   terraform = {
@@ -16,12 +17,23 @@ module "renderer" {
     backend = var.terraform_backend
     cloud   = { organization = var.workspace.org }
   }
-  provider_default_tags       = local.renderer_provider_default_tags
-  linked_setups               = { for workspace in local.linked_workspaces : workspace => {} }
-  linked_setup_result_mapping = local.linked_workspaces_mapping
-  main_tf_extra_content       = local.renderer_main_tf_extra_content
-  output                      = var.output
-  generated_by_module         = "dasmeta/terraform-tfe-cloud"
+  provider_configs = {
+    aws = {
+      default_tags = local.renderer_provider_default_tags.aws
+    }
+  }
+  linked = {
+    setups                  = { for workspace in coalesce(var.linked_workspaces, []) : workspace => {} }
+    query                   = { organization = var.workspace.org }
+    result_mapping_template = "data.tfe_outputs.this[\\\"%s\\\"].values.results"
+    data_content_template   = templatefile("${path.module}/templates/tfe_outputs.tf.tftpl", {})
+  }
+  note = local.renderer_note
+  readme = {
+    generated_by_module  = "dasmeta/cloud/tfe"
+    setup_label          = "tf cloud workspace name"
+    module_version_label = "tf_module version"
+  }
 }
 
 resource "tfe_project" "project" {
