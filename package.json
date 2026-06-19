@@ -2,7 +2,7 @@
   "name": "app",
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",
-    "@commitlint/config-conventional": "^17.0.3",
+    "@commitlint/config-conventional": "^20.3.1",
     "husky": "^8.0.1",
     "@semantic-release/github": "^8.0.4",
     "semantic-release": "^19.0.3"
