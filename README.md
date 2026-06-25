@@ -109,6 +109,7 @@ git config --global core.hooksPath ./githooks
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_aws_credentials_variable_set"></a> [aws\_credentials\_variable\_set](#module\_aws\_credentials\_variable\_set) | ./modules/variable-set | n/a |
+| <a name="module_infra_yaml_fetched"></a> [infra\_yaml\_fetched](#module\_infra\_yaml\_fetched) | dasmeta/generic/renderer//modules/infra-yaml-fetched | 1.1.0 |
 | <a name="module_tfe_token_variable_set"></a> [tfe\_token\_variable\_set](#module\_tfe\_token\_variable\_set) | ./modules/variable-set | n/a |
 | <a name="module_workspaces"></a> [workspaces](#module\_workspaces) | ./modules/workspace | n/a |
 
@@ -136,6 +137,7 @@ git config --global core.hooksPath ./githooks
 | <a name="input_targetdir"></a> [targetdir](#input\_targetdir) | The directory where tf cloud workspace corresponding workspaces will be created | `string` | `"./../_terraform/"` | no |
 | <a name="input_tfe_token_variable_set"></a> [tfe\_token\_variable\_set](#input\_tfe\_token\_variable\_set) | The tfe token variable set configs, this token can be used for tfe provider auth in workspaces to create tfe resources like additional variable sets. | <pre>object({<br/>    enabled = optional(bool, true)<br/>    name    = optional(string, "tfe-token")<br/>  })</pre> | `{}` | no |
 | <a name="input_token"></a> [token](#input\_token) | The terraform cloud token | `string` | n/a | yes |
+| <a name="input_yaml_files"></a> [yaml\_files](#input\_yaml\_files) | Optional pre-fetched workspace YAML. When set, skips the internal infra-yaml-fetched module (required when this driver is used as a nested module with a local source). | `any` | `null` | no |
 | <a name="input_yamldir"></a> [yamldir](#input\_yamldir) | The directory where yamls located | `string` | `"."` | no |
 
 ## Outputs

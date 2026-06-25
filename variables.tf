@@ -101,3 +101,9 @@ variable "auto_apply" {
   default     = false
   description = "To have workspaces automatically apply after plan is done successfully."
 }
+
+variable "yaml_files" {
+  type        = any
+  default     = null
+  description = "Optional pre-fetched workspace YAML. When set, skips the internal infra-yaml-fetched module (required when this driver is used as a nested module with a local source)."
+}
