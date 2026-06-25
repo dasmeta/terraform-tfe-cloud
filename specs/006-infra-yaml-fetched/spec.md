@@ -11,9 +11,8 @@ Terraform Cloud workspace orchestration in this repository.
 
 ## What
 
-- call `infra-yaml-fetched` from registry version `1.1.0`
+- call `infra-yaml-fetched` from registry version `1.1.1`
 - remove duplicated YAML locals from the driver root module
-- accept optional pre-fetched `yaml_files` for nested local module sources
 - keep workspace module generation and Terraform Cloud resources unchanged
 
 ## Acceptance Criteria

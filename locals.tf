@@ -24,5 +24,5 @@ locals {
   # if token is TFC token ID then resource should not be created and provided token should be used
   oauth_token_id = local.create_oauth_client ? tfe_oauth_client.this[0].oauth_token_id : var.git_token
 
-  yaml_files = coalesce(var.yaml_files, try(module.infra_yaml_fetched[0].yaml_files, {}))
+  yaml_files = module.infra_yaml_fetched.yaml_files
 }
