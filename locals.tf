@@ -24,22 +24,5 @@ locals {
   # if token is TFC token ID then resource should not be created and provided token should be used
   oauth_token_id = local.create_oauth_client ? tfe_oauth_client.this[0].oauth_token_id : var.git_token
 
-  root_shared_yaml = try(file("${var.yamldir}/_.yaml"), "")
-  folders_shared_yaml = {
-    for file in fileset(
-      var.yamldir,
-      "**/*/_.yaml"
-    ) : replace(file, "/_.yaml$/", "") => try(file("${var.yamldir}/${file}"), "")
-    if length(regexall("\\.terraform", file)) <= 0 # exclude files coming from .terraform folder
-  }
-  yaml_files_raw = {
-    for file in fileset(
-      var.yamldir,
-      "**/*.yaml"
-    ) : replace(file, "/.yaml$/", "") => try(yamldecode(join("\n", concat([local.root_shared_yaml], [for folder_name, shared_content in local.folders_shared_yaml : shared_content if strcontains(file, folder_name)], [file("${var.yamldir}/${file}")]))), {})
-    if length(regexall("\\.terraform|/_\\.yaml", file)) <= 0 # exclude files coming from .terraform folder and ones names _.yaml desired for shared
-  }
-
-  yaml_files = { for key, item in local.yaml_files_raw : key => item
-  if try(item.source, null) != null && try(item.version, null) != null }
+  yaml_files = module.infra_yaml_fetched.yaml_files
 }

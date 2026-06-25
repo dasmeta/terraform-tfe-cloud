@@ -109,6 +109,7 @@ git config --global core.hooksPath ./githooks
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_aws_credentials_variable_set"></a> [aws\_credentials\_variable\_set](#module\_aws\_credentials\_variable\_set) | ./modules/variable-set | n/a |
+| <a name="module_infra_yaml_fetched"></a> [infra\_yaml\_fetched](#module\_infra\_yaml\_fetched) | dasmeta/generic/renderer//modules/infra-yaml-fetched | 1.1.1 |
 | <a name="module_tfe_token_variable_set"></a> [tfe\_token\_variable\_set](#module\_tfe\_token\_variable\_set) | ./modules/variable-set | n/a |
 | <a name="module_workspaces"></a> [workspaces](#module\_workspaces) | ./modules/workspace | n/a |
 
