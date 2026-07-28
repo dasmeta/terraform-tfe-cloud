@@ -10,11 +10,36 @@ module "workspaces" {
   module_vars    = try(each.value.variables, [])
   output         = try(each.value.output, null)
   target_dir     = var.targetdir
+  main_tf_extra_content = local.github_variable_set_workspaces[each.key] ? trimspace(<<-EOT
+    variable "github_token" {
+      type      = string
+      sensitive = true
+    }
+
+    resource "tfe_variable" "github_token" {
+      key             = "GITHUB_TOKEN"
+      value           = var.github_token
+      category        = "env"
+      description     = "GitHub provider authentication managed by MetaCloud"
+      hcl             = false
+      sensitive       = true
+      variable_set_id = module.this.id
+    }
+  EOT
+  ) : null
 
   module_providers  = try(each.value.providers, [])
   linked_workspaces = try(each.value.linked_workspaces, [])
 
   auto_apply = var.auto_apply
+
+  workspace_variables = local.github_variable_set_workspaces[each.key] ? [{
+    key         = "github_token"
+    value       = var.git_token
+    category    = "terraform"
+    description = "GitHub token supplied by MetaCloud for the YAML-managed github variable set"
+    sensitive   = true
+  }] : []
 
   workspace = {
     org             = var.org

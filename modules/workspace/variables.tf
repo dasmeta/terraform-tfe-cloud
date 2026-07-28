@@ -34,6 +34,25 @@ variable "module_vars" {
   description = "The module variables"
 }
 
+variable "main_tf_extra_content" {
+  type        = string
+  default     = null
+  description = "Additional Terraform content rendered into the generated main.tf file."
+}
+
+variable "workspace_variables" {
+  type = list(object({
+    key         = string
+    value       = string
+    category    = string
+    description = optional(string, "")
+    hcl         = optional(bool, false)
+    sensitive   = optional(bool, false)
+  }))
+  default     = []
+  description = "Terraform Cloud variables managed directly on the workspace."
+}
+
 variable "target_dir" {
   type        = string
   default     = "./"

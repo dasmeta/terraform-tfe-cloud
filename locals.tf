@@ -25,4 +25,14 @@ locals {
   oauth_token_id = local.create_oauth_client ? tfe_oauth_client.this[0].oauth_token_id : var.git_token
 
   yaml_files = module.infra_yaml_loader.yaml_files
+
+  github_variable_set_workspaces = {
+    for key, item in local.yaml_files : key => (
+      var.git_enabled &&
+      var.git_provider == "github" &&
+      local.create_oauth_client &&
+      item.source == "dasmeta/cloud/tfe//modules/variable-set" &&
+      try(item.variables.name, null) == "github"
+    )
+  }
 }

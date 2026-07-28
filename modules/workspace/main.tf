@@ -11,7 +11,8 @@ module "renderer" {
     providers = var.module_providers
     output    = var.output
   }
-  target_dir = var.target_dir
+  target_dir            = var.target_dir
+  main_tf_extra_content = var.main_tf_extra_content
   terraform = {
     version = var.terraform_version
     backend = var.terraform_backend
@@ -91,4 +92,16 @@ resource "tfe_workspace_variable_set" "this" {
 
   workspace_id    = tfe_workspace.this.id
   variable_set_id = each.value
+}
+
+resource "tfe_variable" "workspace" {
+  for_each = { for item in var.workspace_variables : item.key => item }
+
+  key          = each.value.key
+  value        = each.value.value
+  category     = each.value.category
+  description  = each.value.description
+  hcl          = each.value.hcl
+  sensitive    = each.value.sensitive
+  workspace_id = tfe_workspace.this.id
 }
