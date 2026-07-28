@@ -70,6 +70,14 @@ aws = {
 }
 ```
 
+## GitHub provider token
+
+For GitHub repositories, MetaCloud writes the configured `git_token` as the
+sensitive `GITHUB_TOKEN` environment variable in the bootstrapped `github`
+variable set. Re-running MetaCloud keeps the provider token in sync without a
+manual Terraform Cloud variable edit. OAuth token IDs and non-GitHub providers
+are not changed.
+
 ## ToDo
 1. Modify module to not create workspace immediately but only when code is committed (this might create issue with race condition, workspaces can be created but TFC might have had already tried to execute code).
 2. There is an issue with some providers (more details in jira).

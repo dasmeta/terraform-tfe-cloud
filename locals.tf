@@ -25,4 +25,9 @@ locals {
   oauth_token_id = local.create_oauth_client ? tfe_oauth_client.this[0].oauth_token_id : var.git_token
 
   yaml_files = module.infra_yaml_loader.yaml_files
+
+  # A raw GitHub token can authenticate both the Terraform Cloud VCS OAuth
+  # client and the GitHub provider used by generated workspaces. OAuth token
+  # IDs cannot be converted back into a GitHub token, so they are excluded.
+  manage_github_provider_token = var.git_enabled && var.git_provider == "github" && local.create_oauth_client
 }
