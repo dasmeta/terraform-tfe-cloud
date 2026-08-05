@@ -1,6 +1,9 @@
 # Why
 We needed way to run terraform modules using yaml files as it is much simpler.
 
+Debugging this driver or a setup that consumes it? See [AGENTS.md](./AGENTS.md)
+for the symptom-to-cause table, validation recipes, and known traps.
+
 ## How
 We have decided to use terraform cloud to execute terraform code.
 We have decided that it is right to have workspace per module as we do not want giant module dependencies.
@@ -94,7 +97,7 @@ git config --global core.hooksPath ./githooks
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.8 |
 | <a name="requirement_deepmerge"></a> [deepmerge](#requirement\_deepmerge) | ~> 1.1 |
 | <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | ~> 0.74 |
 
@@ -109,7 +112,7 @@ git config --global core.hooksPath ./githooks
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_aws_credentials_variable_set"></a> [aws\_credentials\_variable\_set](#module\_aws\_credentials\_variable\_set) | ./modules/variable-set | n/a |
-| <a name="module_infra_yaml_loader"></a> [infra\_yaml\_loader](#module\_infra\_yaml\_loader) | dasmeta/generic/renderer//modules/infra-yaml-loader | 1.2.1 |
+| <a name="module_infra_yaml_loader"></a> [infra\_yaml\_loader](#module\_infra\_yaml\_loader) | dasmeta/generic/renderer//modules/infra-yaml-loader | 1.2.2 |
 | <a name="module_tfe_token_variable_set"></a> [tfe\_token\_variable\_set](#module\_tfe\_token\_variable\_set) | ./modules/variable-set | n/a |
 | <a name="module_workspaces"></a> [workspaces](#module\_workspaces) | ./modules/workspace | n/a |
 

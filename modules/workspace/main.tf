@@ -1,6 +1,6 @@
 module "renderer" {
   source  = "dasmeta/generic/renderer"
-  version = "1.0.4"
+  version = "1.2.2"
 
   name       = var.name
   setup_path = var.name

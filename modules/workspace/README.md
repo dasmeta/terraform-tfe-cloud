@@ -47,20 +47,20 @@ agent-pool lookup.
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.8 |
 | <a name="requirement_tfe"></a> [tfe](#requirement\_tfe) | ~> 0.74 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | ~> 0.74 |
+| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | 0.79.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_renderer"></a> [renderer](#module\_renderer) | dasmeta/generic/renderer | 1.0.4 |
+| <a name="module_renderer"></a> [renderer](#module\_renderer) | dasmeta/generic/renderer | 1.2.2 |
 
 ## Resources
 
