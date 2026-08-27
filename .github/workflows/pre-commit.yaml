@@ -4,7 +4,12 @@ on:
   push:
     branches: [main, master]
 jobs:
-  terraform-validate:
+  # Named pre-commit, not terraform-validate. It used to share the latter name
+  # with the job in terraform-test.yaml, so two workflows reported the same
+  # status context and branch protection could not tell which one it was
+  # requiring.
+  pre-commit:
+    name: pre-commit
     runs-on: ubuntu-latest
     permissions:
       actions: write
@@ -14,10 +19,10 @@ jobs:
       id-token: write
     steps:
     - name: Pre-Commit
-      uses: dasmeta/reusable-actions-workflows/pre-commit@4.3.2
+      uses: dasmeta/reusable-actions-workflows/pre-commit@4.4.0
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        path: modules/${{ matrix.path }}
-      continue-on-error: true
+        # A pull request is judged on the files it touched; a push to the
+        # default branch still checks everything.
+        scope: ${{ github.event_name == 'pull_request' && 'changed' || 'all' }}
+        terraform-docs-version: 0.20.0
