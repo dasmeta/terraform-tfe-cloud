@@ -18,14 +18,23 @@ repos:
         args: ['--allow-missing-credentials']
       - id: detect-private-key
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.64.1
+    rev: v1.109.0
     hooks:
       - id: terraform_fmt
+      # Documentation behaviour lives in .terraform-docs.yml, not in flags, so
+      # a local run and a CI run read the same committed configuration. The
+      # path is relative on purpose: the hook rewrites it to an absolute path
+      # from the repository root before entering each module directory.
+      #
+      # The previous --hook-config args are deliberately gone:
+      #   --add-to-existing-file  used the hook's own markers, which appended a
+      #                           second documentation block to any README that
+      #                           already had terraform-docs markers
+      #   --create-file-if-not-exist  created READMEs in examples and test
+      #                           fixtures that nobody asked for
       - id: terraform_docs
         args:
-          - --hook-config=--path-to-file=README.md
-          - --hook-config=--add-to-existing-file=true
-          - --hook-config=--create-file-if-not-exist=true
+          - --args=--config=.terraform-docs.yml
   - repo: https://github.com/qoomon/git-conventional-commits
     rev: v2.4.0
     hooks:
