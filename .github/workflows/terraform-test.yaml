@@ -25,13 +25,20 @@ jobs:
       id-token: write
     runs-on: ubuntu-latest
     steps:
-    - uses: dasmeta/reusable-actions-workflows/terraform-test@4.4.0
+    # Provider-independent validation: no credentials, no backend, no provider
+    # plugins beyond what the configuration itself declares. A Helm-only or
+    # non-AWS module must not need AWS credentials to be validated.
+    - uses: actions/checkout@v4
+    - uses: hashicorp/setup-terraform@v3
       with:
-        aws-region: ${{ secrets.AWS_REGION}}
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        path: ${{ matrix.path }}
         terraform_version: 1.9.8
+        terraform_wrapper: false
+    - name: Validate
+      run: |
+        cd "${{ matrix.path }}"
+        terraform init -backend=false
+        terraform validate
+      shell: bash
 
   # The stable required context. Its name does not depend on the path list, so
   # branch protection can require `terraform-validate` once and keep requiring
