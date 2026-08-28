@@ -10,6 +10,11 @@ repos:
         args: [--markdown-linebreak-ext=md]
         exclude: CHANGELOG.md
       - id: check-yaml
+        # Syntax-only. Several managed repositories split YAML anchors across
+        # files on purpose, and a strict load fails on the undefined alias.
+        # githooks/pre-commit runs --all-files, so without this every local
+        # commit in those repositories is blocked.
+        args: [--unsafe]
       - id: check-merge-conflict
       - id: check-case-conflict
       - id: mixed-line-ending
