@@ -5,7 +5,7 @@ on:
     branches: [main, master]
 
 jobs:
-  terraform-validate:
+  tflint:
     permissions:
       actions: write
       contents: write
@@ -18,7 +18,7 @@ jobs:
       matrix:
         path:
           - /
-     
+
     steps:
     - uses: dasmeta/reusable-actions-workflows/tflint@4.3.2
       with:
