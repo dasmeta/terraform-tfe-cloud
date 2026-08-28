@@ -4,19 +4,60 @@ on:
   push:
     branches: [main, master]
 jobs:
-  terraform-test:
-    runs-on: ubuntu-latest
-    permissions: {}
+  # One leg per path. These report as `validate (<path>)`, which is the visible
+  # detail; they are not the required context, because their names change
+  # whenever the path list changes and branch protection would need editing
+  # every time.
+  validate:
     strategy:
+      # Without this, one failing path cancels the others and their results are
+      # never reported, so a multi-module repository hides failures behind the
+      # first one.
+      fail-fast: false
       matrix:
         path:
-          - /
-
+          - ./
+    permissions:
+      actions: write
+      contents: write
+      discussions: write
+      pull-requests: write
+      id-token: write
+    runs-on: ubuntu-latest
     steps:
-      - uses: dasmeta/reusable-actions-workflows/terraform-test@4.2.0
-        with:
-          aws-region: ${{ secrets.AWS_REGION}}
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          path: ${{ matrix.path }}
-        continue-on-error: true
+    # Provider-independent validation: no credentials, no backend, no provider
+    # plugins beyond what the configuration itself declares. A Helm-only or
+    # non-AWS module must not need AWS credentials to be validated.
+    - uses: actions/checkout@v4
+    - uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.9.8
+        terraform_wrapper: false
+    - name: Validate
+      run: |
+        cd "${{ matrix.path }}"
+        terraform init -backend=false
+        terraform validate
+      shell: bash
+
+  # The stable required context. Its name does not depend on the path list, so
+  # branch protection can require `terraform-validate` once and keep requiring
+  # it as modules come and go.
+  #
+  # `needs` on a matrix job aggregates: the result is success only when every
+  # leg succeeded. `if: always()` makes this job run even when a leg failed,
+  # which is the only way it can report that failure rather than being skipped.
+  terraform-validate:
+    needs: [validate]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check validation result
+      run: |
+        result="${{ needs.validate.result }}"
+        if [ "$result" != "success" ]; then
+          echo "terraform validation did not succeed: $result"
+          exit 1
+        fi
+        echo "all validation legs passed"
+      shell: bash
