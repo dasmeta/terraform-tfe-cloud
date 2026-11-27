@@ -49,9 +49,9 @@ module "this" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_helm"></a> [helm](#provider\_helm) | 2.17.0 |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.38.0 |
-| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | 0.74.1 |
+| <a name="provider_helm"></a> [helm](#provider\_helm) | ~> 2.0 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | ~> 2.0 |
+| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | ~> 0.40 |
 
 ## Modules
 

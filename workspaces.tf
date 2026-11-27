@@ -29,6 +29,9 @@ module "workspaces" {
     branch         = var.git_branch
   }
 
-  variable_sets    = try(each.value.variable_sets, [])
-  variable_set_ids = concat(module.aws_credentials_variable_set[*].id, try(each.value.variable_set_ids, []))
+  variable_sets = try(each.value.variable_sets, [])
+  variable_set_ids = concat(
+    coalesce(try(each.value.inherit_aws_credentials, null), true) ? module.aws_credentials_variable_set[*].id : [],
+    try(each.value.variable_set_ids, [])
+  )
 }

@@ -54,7 +54,7 @@ agent-pool lookup.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | 0.79.0 |
+| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | ~> 0.74 |
 
 ## Modules
 
